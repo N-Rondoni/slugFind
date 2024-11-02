@@ -13,17 +13,17 @@
  
  In summary, the ground up workflow should be
  
- dataPrep.py
+ -dataPrep.py
  
- MPCmain.py 0 1 "test" for specific node/dataset/condition. In this example, node 0 dset 1 condition "test".
+ -MPCmain.py 0 1 "test" for specific node/dataset/condition. In this example, node 0 dset 1 condition "test".
  
- alternatively, driver.py will iterate through all nodes/datasets/conditions
+ Alternatively, driver.py will iterate through all nodes/datasets/conditions
  
- processing.py computes and saves all correlation scores, as well as VPD distances
+ -processing.py computes and saves all correlation scores, as well as VPD distances
  
- plotFriend.py visualizes this content
+ -plotFriend.py visualizes the output of processing.py 
  
- for visualizations of spiking as a function of calcium data on a subset, use fancyPlottingMPCmain.py
+ -for visualizations of spiking as a function of calcium data on a subset, use fancyPlottingMPCmain.py
  
 
  All raw .csv files, e.g., 1.test.calcium.csv,  were provided from the spikefinder challenge and can be found within the subfolder "data"
