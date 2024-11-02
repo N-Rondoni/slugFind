@@ -1,4 +1,4 @@
- slugFind, referred to as MPC approach in accompanying paper
+ slugFind, or MPC approach as it is referred to in its accompanying manuscript. 
  
  Author: Nicholas A. Rondoni
          nrondoni@ucsc.edu 
