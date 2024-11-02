@@ -1,6 +1,8 @@
  slugFind, referred to as MPC approach in accompanying paper
+ 
  Author: Nicholas A. Rondoni
          nrondoni@ucsc.edu 
+         
  please reach out if you have any questions about this software demo! 
 
 
