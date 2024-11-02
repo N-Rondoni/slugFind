@@ -3,7 +3,7 @@
  Author: Nicholas A. Rondoni
          nrondoni@ucsc.edu 
          
- please reach out if you have any questions about this software demo! 
+ Please reach out if you have any questions about this software implementation! 
 
 
  This directory contains the major software contributions of the paper entitled 
