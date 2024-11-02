@@ -9,7 +9,7 @@
 
 
  This directory contains the major software contributions of the paper entitled 
- "Predicting Neuronal Firing from Calcium Imaging Using a Control Theoretic Approach"
+ "Predicting Neuronal Firing from Calcium Imaging Using a Control Theoretic Approach".
 
 #--------------------------------------------------------------------------------------------#
  
