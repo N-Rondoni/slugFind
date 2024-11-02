@@ -30,47 +30,6 @@ def tvp_fun_sim(t_now):
     tvp_template1['Ci_m'] = np.interp(t_now, timeVec, CI_Meas)
     return tvp_template1
 
-def plotTwoLines(x, y1, y2):
-    plt.figure(1)
-    plt.plot(x, y1, '--', linewidth = 1, label = r'$Ca^{2+}$ (mol)')
-    #plt.plot(x, y2, '--', linewidth = 1, label = r'$CI$ (mol)')
-    plt.plot(x, y2, linewidth = 2, label = r'$CI^{*}$ (mol)')
-    plt.title('Dynamics Derived from CRN', fontsize = 18)
-    plt.xlabel(r'$t$', fontsize = 14)
-    plt.ylabel(r'Concentration', fontsize = 14)
-    plt.legend()
-    filename = 'MPC_fig1_node' + str(row) + '.png'
-    #plt.savefig(filename)
-    #os.system('cp ' + filename + ' /mnt/c/Users/nicho/Pictures/CRE_across_nodes/') # only run with this line uncommented if you are Nick
-  
-
-def plotFourLines(x, y1, y2, y3, y4):
-    plt.figure(2)
-    plt.plot(x, y1, '--', linewidth = 1, label = r'$Ca^{2+}$ (mol)')
-    plt.plot(x, y2, '--', linewidth = 1, label = r'$CI$ (mol)')
-    plt.plot(x, y3, '--', linewidth = 1, label = r'$CI^{*}$ (mol)')
-    plt.plot(x, y4, '--', linewidth = 1, label = r'$s$ (Hz)')
-    plt.title('Dynamics Derived from CRN', fontsize = 18)
-    plt.xlabel(r'$t$', fontsize = 14)
-    plt.ylabel(r'Concentration (mol), Rate (Hz)', fontsize = 14)
-    plt.legend()
-    filename = 'MPC_fig2_node' + str(row) + '.png'
-    #plt.savefig(filename)
-    #os.system('cp ' + filename + ' /mnt/c/Users/nicho/Pictures/MPC_CRE_across_nodes/') # only run with this line uncommented if you are Nick
-   
-
-def plotErr(x, y):
-    plt.figure(2)
-    plt.plot(x, y, label = r'$Error$')
-    plt.title('Dynamics of Error as a function of time', fontsize = 18)
-    plt.xlabel(r'$t$', fontsize = 14)
-    plt.ylabel(r'Error', fontsize = 14)
-    plt.legend()
-    filename = 'CRE_fig2_' + str(i) + '.png'
-    #plt.savefig(filename)
-    #os.system('cp ' + filename + ' /mnt/c/Users/nicho/Pictures/MPC_CRE_across_nodes/') # only run with this line uncommented if you are Nick
-
-
 def sigmoid(signal):
     sig = 1/(1 + np.exp(-1*(signal - 1)))
     return sig
@@ -215,10 +174,6 @@ if __name__=="__main__":
 
     # transpose
     sol = np.transpose(mpc.data['_x'])
-
-    plotTwoLines(t_f, Ca_f, CiF_f)
-    plotFourLines(t_f, Ca_f, Ci_f, CiF_f, s)
-
 
     # check error between Ci_M and Ci_sim
     CI_Meas_interp = np.interp(t_f, timeVec, CI_Meas) # interp call only does something if tstep isn't the same as imRate
