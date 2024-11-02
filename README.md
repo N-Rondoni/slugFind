@@ -29,9 +29,11 @@
 
  All raw .csv files, e.g., 1.test.calcium.csv,  were provided from the spikefinder challenge and can be found within the subfolder "data"
  
- We did not in any way collect this source data, and credit is due to Berens et al's paper in Plos Computational Biology entitled
+ We did not in any way collect this source data, and credit is due to Berens et. al.'s paper in Plos Computational Biology entitled
  
- "Community-based benchmarking improves spike rate inference from two-photon calcium imaging data" for compiling and providing it. 
+ "Community-based benchmarking improves spike rate inference from two-photon calcium imaging data", found at https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1006157#sec014
+ 
+ for compiling and providing it. 
 
 #--------------------------------------------------------------------------------------------#
 
