@@ -25,15 +25,16 @@
  
  -for visualizations of spiking as a function of calcium data on a subset, use fancyPlottingMPCmain.py
  
-
+#--------------------------------------------------------------------------------------------#
  All raw .csv files, e.g., 1.test.calcium.csv,  were provided from the spikefinder challenge and can be found within the subfolder "data"
  
  We did not in any way collect this source data, and credit is due to Berens et al's paper in Plos Computational Biology entitled
  
  "Community-based benchmarking improves spike rate inference from two-photon calcium imaging data" for compiling and providing it. 
 
+#--------------------------------------------------------------------------------------------#
 
- BELOW PROVIDES MORE ROBUST DETAILS AND DESCRIBES DATA ORGANIZATION STRUCTURE, IF NEEDED: ###########################################################
+ BELOW PROVIDES MORE ROBUST DETAILS AND DESCRIBES DATA ORGANIZATION STRUCTURE, IF NEEDED: 
 
  Within the folder "data" is a subfolder named "processed" (path data/processed)
  
