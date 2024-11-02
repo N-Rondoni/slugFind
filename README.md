@@ -15,7 +15,7 @@
  
  -dataPrep.py
  
- -MPCmain.py 0 1 "test" for specific node/dataset/condition. In this example, node 0 dset 1 condition "test".
+ -can run: MPCmain.py 0 1 "test" from command line for specific node/dataset/condition. In this example, node 0 dset 1 condition "test".
  
  Alternatively, driver.py will iterate through all nodes/datasets/conditions
  
