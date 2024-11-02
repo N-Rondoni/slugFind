@@ -42,5 +42,5 @@
  processing.py will save all correlation scores within the data folder. 
 
  For visualization, run plotFriend.py, which will generate most the figures used in the paper. 
-# For visulaization of specific subsets of spiking activity, run fancyPlottingMPCmain.py 
-# fancyPlottingMPCmain.py is exactly MPCmain.py, but produces fancy plots which would slow down driver.py if looped over. 
+ For visulaization of specific subsets of spiking activity, run fancyPlottingMPCmain.py 
+ fancyPlottingMPCmain.py is exactly MPCmain.py, but produces fancy plots which would slow down driver.py if looped over. 
