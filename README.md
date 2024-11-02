@@ -8,7 +8,8 @@
  "Predicting Neuronal Firing from Calcium Imaging Using a Control Theoretic Approach"
 
 #--------------------------------------------------------------------------------------------
- in summary, the ground up workflow should be
+ 
+ In summary, the ground up workflow should be
  dataPrep.py
  MPCmain.py 0 1 "test" for specific node/dataset/condition. In this example, node 0 dset 1 condition "test".
  alternatively, driver.py will iterate through all nodes/datasets/conditions
