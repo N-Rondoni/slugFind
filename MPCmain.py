@@ -56,7 +56,7 @@ if __name__=="__main__":
     # set up timevec, recordings were resampled to 100 hz
     imRate = 1/100
     tEnd = n*(imRate) 
-    print("Simulating until final time", tEnd/60, "minutes, consisting of", n, "data points")
+    print("Simulating until final time",  f"{tEnd/60:.3f}", "minutes, consisting of", n, "data points")
     timeVec = np.linspace(0, tEnd, n, endpoint = False) #used in interp call
     
 
@@ -158,7 +158,7 @@ if __name__=="__main__":
         x0 = estimator.make_step(y_next)
 
     end = time.time()
-    print("Solve completed in",  (end-start)/60, "minutes")
+    print("Solve completed in",  f"{(end-start)/60:.3f}", "minutes")
 
     # pull final solutions for ease of use, _f denotes final version of that param
     Ca_f = mpc.data['_x'][:, 0]     # calcium ion

@@ -1,6 +1,6 @@
 ## This file was provided by original the spikefinder challenge team. Only the _downsample function is utilized in my implementation. 
 
-from scipy import corrcoef
+#from scipy import corrcoef
 from scipy.stats import spearmanr
 from numpy import percentile, asarray, arange, zeros, where, repeat, sort, cov, mean, std, ceil
 from numpy import vstack, hstack, argmin, ones, convolve, log, linspace, min, max, square, sum, diff
