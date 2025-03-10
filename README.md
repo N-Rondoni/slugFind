@@ -1,6 +1,4 @@
- TESTING THINGS HERE BEFORE THE ARE PUT INTO THE REAL slugFind git!
-
- slugFind, or MPC approach as it is referred to in its accompanying manuscript, infers neuronal spiking as a function of calcium imaging data.
+slugFind, or MPC approach as it is referred to in its accompanying manuscript, infers neuronal spiking as a function of calcium imaging data.
  
  Corresponding Author: Nicholas A. Rondoni
          nrondoni@ucsc.edu 
