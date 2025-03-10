@@ -51,8 +51,8 @@ def minInd(bb):
 
 if __name__=="__main__":
     start = time.time() # begin timer
-    alphas = np.linspace(0, 5, 5)
-    gammas  = np.linspace(0, 20, 5)
+    alphas = np.linspace(0, 6, 60)
+    gammas  = np.linspace(0, 15, 60)
     loss = np.zeros((np.shape(alphas)[0], np.shape(gammas)[0]))
     
 
@@ -111,7 +111,7 @@ if __name__=="__main__":
 
             # compute loss wrt sigmoid of CI_meas, CI_sim. Utilizing 2norm. 
             #print("Relative MSE of measured calcium tracking tracking:", np.linalg.norm(CI_Meas - CiF_f)/len(CiF_f))
-
+            CiF_f = sigmoid(CiF_f)
             loss[k, j]  = np.linalg.norm(CI_Meas - CiF_f)/len(CiF_f)
 
 
