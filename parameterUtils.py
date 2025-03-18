@@ -66,3 +66,11 @@ def paramValuesBFS(dset, CiF_0):
         L = CiF_0 + 100  
 
     return kf, kr, L
+
+
+def learnedParams(dset, row, CiF_0):
+    saveLoc = 'data/paramEstimation/alphas_node'+ str(row) + '_dset' + str(dset) + '.' + str(stat) + '_params'
+    alphas = np.load(saveLoc)
+    print(alphas)
+
+

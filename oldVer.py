@@ -53,14 +53,29 @@ def CRN_alpha(t, A):
     
 
 
+def gradient_descent(X, y, learning_rate=0.01, iterations=1000):
+    #initialize weights  
+    beta = np.random.randn(X.shape[1])
+    for i in range(iterations):
+        y_pred = X.dot(beta)
+        error = y_pred - y
+        gradient = 2 * X.T @ (y_pred - y) / X.shape[0]
+        #approximate the gradient and update weights 
+        beta -= learning_rate * gradient
+        if i % 100 == 0:
+            loss = np.mean(error ** 2)
+            print(f"Iteration {i}: loss = {loss}, beta = {beta}")    
+    return beta
+
+
 if __name__=="__main__":
     start = time.time() # begin timer
  
     # passed in from driver.py or manually in command line, 
     # row denotes a neuron's index, dset the dset number, and stat the status of either "train" or "test". 
-    row = int(sys.argv[1])    
-    dset = int(sys.argv[2])
-    stat = str(sys.argv[3])
+    row = 0#int(sys.argv[1])    
+    dset = 3#int(sys.argv[2])
+    stat = "train"#str(sys.argv[3])
 
     # load in data
     file_path = 'data/processed/node'+ str(row) + '_dset' + str(dset) + '.' + str(stat) + '.calcium.npy'
@@ -91,84 +106,59 @@ if __name__=="__main__":
 
     kf, kr, alpha, gamma, L = paramValues(dset, CiF_0)
     # suppose instead params are pulled from lit
-    #kf = 0.032
-    #kr = 8
-    
-    kf = 0.1
-    kr = 10
+    kf = 0.032
+    kr = 8
 
-    alpha = np.random.uniform(1, 30)
-    alpha_list = np.arange(3, 30, 10)
-
+    alpha = np.random.uniform(1, 20)
+    alpha = 5
     gamma = 1
-
     error_prev = 0
-    error_min = 100
-    paramsOut = [] # to be filled with final alpha of gradient descent
 
-    numStep = 100
-    for alpha in alpha_list:
-        #print(alpha)
-        for i in range(numStep):
-            print("Beginning grad descent step", i)
-            
+    numStep = 200
+    for i in range(numStep):
+        print("Beginning grad descent step", i)
+        
 
-            x0 = np.array([Ca_0, CiF_0, gx_0, gz_0])
+        x0 = np.array([Ca_0, CiF_0, gx_0, gz_0])
 
-            
-            # pack up parameters and ICs
-            p = [kf, kr, alpha, gamma, L]
+        
+        # pack up parameters and ICs
+        p = [kf, kr, alpha, gamma, L]
 
 
-            # Solve ODEs with CI_meas, real spike data involved    
-            sol = solve_ivp(CRN_alpha, [0, tEnd], x0, t_eval=timeVec)
-         
-            Ca_f =  sol.y[0, :]
-            CiF_f = sol.y[1, :]
-            grad_X = sol.y[2, :]
-            grad_Z = sol.y[3, :]
-       
-            CiF_f = sigmoid(CiF_f) 
+        # Solve ODEs with CI_meas, real spike data involved    
+        sol = solve_ivp(CRN_alpha, [0, tEnd], x0, t_eval=timeVec)
+     
+        Ca_f =  sol.y[0, :]
+        CiF_f = sol.y[1, :]
+        grad_X = sol.y[2, :]
+        grad_Z = sol.y[3, :]
+   
+        CiF_f = sigmoid(CiF_f) 
 
-            
-            ga_L = np.sum(-2*(CI_Meas - CiF_f)*grad_Z*0.01) 
-            #print("gradient wrt alpha", ga_L)
-            # step
-            rho = .5  # learning rate
-            alpha = alpha - rho*ga_L
-            #gamma = gamma - rho*gL
-            
-            print("alpha:", alpha)
+        
+        ga_L = np.sum(-2*(CI_Meas - CiF_f)*grad_Z*0.01) # should be 0.01, doesn't matter? 
 
-            # compute loss wrt sigmoid of CI_meas, CI_sim. Utilizing 2norm. 
-            error_current = np.linalg.norm(CI_Meas - CiF_f)#/len(CiF_f)
-            error_dif = error_current - error_prev
-            error_prev = error_current
+        # step
+        rho = .1  # learning rate
+        alpha = alpha - rho*ga_L
+        #gamma = gamma - rho*gL
+        
+        print("alpha:", alpha)
+        print("gamma:", gamma)
+        # compute loss wrt sigmoid of CI_meas, CI_sim. Utilizing 2norm. 
+        error_current = np.linalg.norm(CI_Meas - CiF_f)#/len(CiF_f)
+        error_dif = error_current - error_prev
+        error_prev = error_current
 
-            error_MSE =  np.mean((CI_Meas - CiF_f)**2)
 
-            if error_current < error_min:
-                error_min = error_current
-                alpha_best = alpha
-            if (i+1) % 100 == 0:
-                alpha_fin = alpha
-                paramsOut = np.append(paramsOut, alpha_fin)
-               
-            print("2norm of measured calcium tracking tracking:", error_current)
-            print("difference in error between previous step:", error_dif)
-            print("MSE of measured calcium tracking tracking:", error_MSE)
-            print("Raw Differences, summed", np.sum((CI_Meas - CiF_f)**2)*.01)
-            print("#_____________________________#")
-    
-    print("Min error found: ", error_min)
-    print("Created by using alpha = ", alpha_best,"gamma = ", gamma,  "kf = ", kf, "kr = ", kr)
-    # prepend best alpha to paramsOut
-    paramsOut = np.insert(paramsOut, 0, alpha_best, axis=0)
-    print(paramsOut)
-    saveLoc = 'data/paramEstimation/alphas_node'+ str(row) + '_dset' + str(dset) + '.' + str(stat) + '_params'
+        print("Relative MSE of measured calcium tracking tracking:", error_current)
+        print("difference in error between previous step:", error_dif)
+        print("#_____________________________#")
+        #del(sol) 
 
-    np.save(saveLoc, paramsOut)
+
 
     stop = time.time()
     runTime = (stop - start)/60
-    print("Total run took", f"{runTime:.3f}", " minutes.")
+    print(f"{runTime:.3f}")

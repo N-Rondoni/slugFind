@@ -40,9 +40,9 @@ if __name__=="__main__":
  
     # passed in from driver.py or manually in command line, 
     # row denotes a neuron's index, dset the dset number, and stat the status of either "train" or "test". 
-    row = 2#int(sys.argv[1])    
-    dset = 3#int(sys.argv[2])
-    stat = "train"#str(sys.argv[3])
+    row = int(sys.argv[1])    
+    dset = int(sys.argv[2])
+    stat = str(sys.argv[3])
 
     # load in data
     file_path = 'data/processed/node'+ str(row) + '_dset' + str(dset) + '.' + str(stat) + '.calcium.npy'
@@ -86,12 +86,22 @@ if __name__=="__main__":
 
     #alpha= 9.264169650175951
     #gamma= 1
-    kf = 0.032
-    kr = 8
-    alpha= 24.146260779645328
-    gamma= 1
-
-
+    #kf = 0.032
+    #kr = 8
+    #alpha= 24.146260779645328
+    #gamma= 1
+    #alpha= 36.28409216610598
+    ##gamma= 1
+    #alpha =  13.023667903853783 
+    #alpha = 9.184542385426406
+    #alpha =  26.36324034381854
+    #alpha =  15.4635905
+    #alpha = 13.03130759301585
+    alpha = 8.61607316
+    gamma = 1
+    kf = 0.1
+    kr = 10
+   
     tstep = 1/100 # tstep of solver, can be reworked to be different from imRate, requires interpolation. 
    
     s = model.set_variable('_u', 's')         # control variable
@@ -196,13 +206,13 @@ if __name__=="__main__":
     s = np.array(s[:,0])                        # reshape s for future computations    
     s_interp = np.interp(timeVec, t_f[:,0], s)  # interp command only does something if tstep isn't the same as imRate
 
-    print("Relative MSE of measured calcium tracking tracking:", np.linalg.norm(CI_Meas_interp - CiF_f)/len(CiF_f))
+    print("Relative 2norm of measured calcium tracking:", np.linalg.norm(CI_Meas_interp - CiF_f)/len(CiF_f))
+    print("MSE of measured calcium tracking tracking:", np.mean(CI_Meas_interp - CiF_f)**2)
 
     # load in actual ground truth spike data
     file_path2 = 'data/processed/node'+ str(row) + '_dset' + str(dset) + '.' + str(stat) + '.spikes.npy'
     spikeDatRaw = np.load(file_path2)
-    spikeDatRaw = spikeDatRaw[:n] 
-    
+    spikeDatRaw = spikeDatRaw[:n]
     
     ##---------------------------------------------------------------------------------##
     # POST PROCESS BELOW, saving, downsampling, and correlation comutations.            #

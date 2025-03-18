@@ -27,7 +27,7 @@ def CRN_alpha(t, A):
         s :  must be one of the impulse functions above, e.g., impulseSquare(t)
              remember to change this in plotting functions below as well. 
     """
-    x, z, ga_x, ga_z  = A
+    x, z, ga_x, ga_z, gk_x, gk_z  = A
     #kf, kr, alpha, gamma, beta = p
     kf, kr, alpha, gamma, L = p
 
@@ -38,12 +38,15 @@ def CRN_alpha(t, A):
     s = np.interp(t, timeVec, spikeDatRaw)
     
     # augmented system with time evolution of grad x, z
-    # rhs of ODES d/dt[x, z, ga_x, ga_z]
+    # gradients taken wrt alpha, kr for optimization. Denoted ga_x and gk_x respectively
+    # rhs of ODES d/dt[x, z, ga_x, ga_z, gk_x, gk_z]
     
     du = [alpha*s - gamma*x + kr*z - kf*x*(L-z), 
           kf*x*(L-z) - kr*z,
           s - gamma*ga_x + kr*ga_z - kf*ga_x*L + kf*ga_x*z + kf*x*ga_z, 
-          kf*ga_x*L - kf*ga_x*z - kf*x*ga_z - kr*ga_z] 
+          kf*ga_x*L - kf*ga_x*z - kf*x*ga_z - kr*ga_z,
+          -gamma*gk_x + kr*gk_z + z - kf*gk_x*L + kf*gk_x*z + kf*x*gk_z,
+          kf*gk_x*L - kf*gk_x*z - kf*x*gk_z - z - kr*gk_z] 
     
     return du
 
@@ -73,9 +76,9 @@ if __name__=="__main__":
  
     # passed in from driver.py or manually in command line, 
     # row denotes a neuron's index, dset the dset number, and stat the status of either "train" or "test". 
-    row = 0#int(sys.argv[1])    
-    dset = 3#int(sys.argv[2])
-    stat = "train"#str(sys.argv[3])
+    row = int(sys.argv[1])    
+    dset = int(sys.argv[2])
+    stat = str(sys.argv[3])
 
     # load in data
     file_path = 'data/processed/node'+ str(row) + '_dset' + str(dset) + '.' + str(stat) + '.calcium.npy'
@@ -101,21 +104,30 @@ if __name__=="__main__":
     # define initial conditions
     Ca_0 = 5    
     CiF_0 = CI_Meas[0]  
-    gx_0 = 0.5
-    gz_0 = 0.5
-
+    gx_alpha_0 = 0.5
+    gz_alpha_0 = 0.5
+    gx_kr_0 = 0.5
+    gz_kr_0 = 0.5
+    
     kf, kr, alpha, gamma, L = paramValues(dset, CiF_0)
 
-    alpha = 5
-    gamma = 1
+    #alpha = 5
+    #kr = 4
+    alpha = np.random.uniform(5, 20)
+    kr = np.random.uniform(2,10)
+    alpha = 0.5
+    kr = 2
+
+    gamma = 10
+    kf = 0.1
+
     error_prev = 0
 
-    numStep = 100
+    numStep = 200
     for i in range(numStep):
         print("Beginning grad descent step", i)
         
-
-        x0 = np.array([Ca_0, CiF_0, gx_0, gz_0])
+        x0 = np.array([Ca_0, CiF_0, gx_alpha_0, gz_alpha_0, gx_kr_0, gz_kr_0])
 
         
         # pack up parameters and ICs
@@ -125,24 +137,32 @@ if __name__=="__main__":
         # Solve ODEs with CI_meas, real spike data involved    
         sol = solve_ivp(CRN_alpha, [0, tEnd], x0, t_eval=timeVec)
      
-        Ca_f =  sol.y[0, :]
-        CiF_f = sol.y[1, :]
-        grad_X = sol.y[2, :]
-        grad_Z = sol.y[3, :]
-   
+        Ca_f =          sol.y[0, :]
+        CiF_f =         sol.y[1, :]
+        grad_X_alpha =  sol.y[2, :]
+        grad_Z_alpha =  sol.y[3, :]
+        grad_X_kr =     sol.y[4, :]
+        grad_Z_kr =     sol.y[5, :]
+
         CiF_f = sigmoid(CiF_f) 
 
+        timeStep = timeVec[1] - timeVec[0]
         
-        ga_L = np.sum(-2*(CI_Meas - CiF_f)*grad_Z*0.1)
+
+        g_L_alpha = np.sum(-2*(CI_Meas - CiF_f)*grad_Z_alpha*timeStep)
+        g_L_kr =  np.sum(-2*(CI_Meas - CiF_f)*grad_Z_kr*timeStep)
+
         # compute gradient w.r.t each param, the same??
 
         # step
-        rho = .1  # learning rate
-        alpha = alpha - rho*ga_L
-        #gamma = gamma - rho*gL
+        rho_alpha = 1  # learning rates
+        rho_kr =  1    # learning rate
+        alpha = alpha - rho_alpha*g_L_alpha
+        kr = kr - rho_kr*g_L_kr
+    
         
         print("alpha:", alpha)
-        print("gamma:", gamma)
+        print("kr:", kr)
         # compute loss wrt sigmoid of CI_meas, CI_sim. Utilizing 2norm. 
         error_current = np.linalg.norm(CI_Meas - CiF_f)#/len(CiF_f)
         error_dif = error_current - error_prev
@@ -151,7 +171,7 @@ if __name__=="__main__":
 
         print("Relative MSE of measured calcium tracking tracking:", error_current)
         print("difference in error between previous step:", error_dif)
-        print("#_____________________________#")
+        print("#________________________________________________#")
         #del(sol) 
 
 

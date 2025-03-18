@@ -40,9 +40,9 @@ if __name__=="__main__":
  
     # passed in from driver.py or manually in command line, 
     # row denotes a neuron's index, dset the dset number, and stat the status of either "train" or "test". 
-    row = 3#int(sys.argv[1])    
-    dset = 3#int(sys.argv[2])
-    stat = "train"#str(sys.argv[3])
+    row = int(sys.argv[1])    
+    dset = int(sys.argv[2])
+    stat = str(sys.argv[3])
 
     # load in data
     file_path = 'data/processed/node'+ str(row) + '_dset' + str(dset) + '.' + str(stat) + '.calcium.npy'
@@ -83,9 +83,18 @@ if __name__=="__main__":
     #gamma = 1.271186440677966 
     #alpha: 14.807914941462634 # from grad desc, dset 3
     #gamma: 1.3666666
+    
+    #alpha= 9.264169650175951 # from grad desc, dset 3 optimizing only over alpha. Kr, kf fixed.
+    #gamma= 1
 
-    alpha= 9.264169650175951
-    gamma= 1
+
+    alpha= 2.417771963760977
+    kr= 1.6634924992365971
+
+
+    kf = .1
+    gamma = 10
+
     tstep = 1/100 # tstep of solver, can be reworked to be different from imRate, requires interpolation. 
    
     s = model.set_variable('_u', 's')         # control variable
