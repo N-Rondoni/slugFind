@@ -98,7 +98,7 @@ if __name__=="__main__":
     kr = 10
 
     alpha = np.random.uniform(1, 30)
-    alpha_list = np.arange(3, 30, 5)
+    alpha_list = np.arange(3, 30, 10)
 
     gamma = 10 #dsets  6, ... require a higher value of gamma or alpha will go negative. 
 
@@ -134,7 +134,7 @@ if __name__=="__main__":
             ga_L = np.sum(-2*(CI_Meas - CiF_f)*grad_Z*0.01) 
             #print("gradient wrt alpha", ga_L)
             # step
-            rho = 10.5  # learning rate
+            rho = 5.5  # learning rate
             alpha = alpha - rho*ga_L
             #gamma = gamma - rho*gL
             

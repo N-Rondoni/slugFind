@@ -78,27 +78,13 @@ if __name__=="__main__":
     # pull dset dependent params from parameterUtils.py
     kf, kr, alpha, gamma, L = paramValues(dset, CiF_0)
 
-    #gamma = 2.85714285714285
-    #alpha = 5.694915254237289 # from BFS, dset 3
-    #gamma = 1.271186440677966 
-    #alpha: 14.807914941462634 # from grad desc, dset 3
-    #gamma: 1.3666666
+    #alpha = 1.14916717 # dset 1, requires gamma 1
+    alpha = 42.57296027 # dset 1, requires gamma 10
+    #alpha = 8.6160731  # dset 3, requires gamma 1
+    #alpha = 19.65693565 # dset 6, requires gamma 10
+    gamma = 10 # dsets 6, ... require gamma to be upped. 
+    #gamma = 1
 
-    #alpha= 9.264169650175951
-    #gamma= 1
-    #kf = 0.032
-    #kr = 8
-    #alpha= 24.146260779645328
-    #gamma= 1
-    #alpha= 36.28409216610598
-    ##gamma= 1
-    #alpha =  13.023667903853783 
-    #alpha = 9.184542385426406
-    #alpha =  26.36324034381854
-    #alpha =  15.4635905
-    #alpha = 13.03130759301585
-    alpha = 8.61607316
-    gamma = 1
     kf = 0.1
     kr = 10
    
