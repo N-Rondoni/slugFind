@@ -98,15 +98,15 @@ if __name__=="__main__":
     kr = 10
 
     alpha = np.random.uniform(1, 30)
-    alpha_list = np.arange(3, 30, 10)
+    alpha_list = np.arange(3, 30, 5)
 
-    gamma = 1
+    gamma = 10 #dsets  6, ... require a higher value of gamma or alpha will go negative. 
 
     error_prev = 0
     error_min = 100
     paramsOut = [] # to be filled with final alpha of gradient descent
 
-    numStep = 100
+    numStep = 200
     for alpha in alpha_list:
         #print(alpha)
         for i in range(numStep):
@@ -134,7 +134,7 @@ if __name__=="__main__":
             ga_L = np.sum(-2*(CI_Meas - CiF_f)*grad_Z*0.01) 
             #print("gradient wrt alpha", ga_L)
             # step
-            rho = .5  # learning rate
+            rho = 10.5  # learning rate
             alpha = alpha - rho*ga_L
             #gamma = gamma - rho*gL
             
