@@ -87,7 +87,8 @@ if __name__=="__main__":
     n = len(CI_Meas)
 
     # apply sigmoidal filter to help minimize noise
-    CI_Meas = sigmoid(CI_Meas) - 0.15
+    vs = 0.15
+    CI_Meas = sigmoid(CI_Meas) - vs
 
     # set up timevec, recordings were resampled to 100 hz
     imRate = 1/100
@@ -118,7 +119,7 @@ if __name__=="__main__":
     alpha = 20
     kr = 2
 
-    gamma = 10
+    gamma = 1
     kf = 0.1
 
     error_prev = 0
@@ -144,7 +145,7 @@ if __name__=="__main__":
         grad_X_kr =     sol.y[4, :]
         grad_Z_kr =     sol.y[5, :]
 
-        CiF_f = sigmoid(CiF_f) 
+        CiF_f = sigmoid(CiF_f) - vs 
 
         timeStep = timeVec[1] - timeVec[0]
         
@@ -155,8 +156,8 @@ if __name__=="__main__":
         # compute gradient w.r.t each param, the same??
 
         # step
-        rho_alpha = 5  # learning rates
-        rho_kr =  2   # learning rate
+        rho_alpha = 0.5  # learning rates
+        rho_kr =  1   # learning rate
         alpha = alpha - rho_alpha*g_L_alpha
         kr = kr - rho_kr*g_L_kr
     

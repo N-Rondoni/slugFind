@@ -71,7 +71,7 @@ if __name__=="__main__":
     # apply sigmoidal filter to help minimize noise
     vs = 0.15
     CI_Meas = sigmoid(CI_Meas) - vs
-    #if dset == 
+ 
 
     # set up timevec, recordings were resampled to 100 hz
     imRate = 1/100
@@ -109,7 +109,7 @@ if __name__=="__main__":
     error_min = 100
     paramsOut = [] # to be filled with final alpha of gradient descent
 
-    numStep = 200
+    numStep = 100
     for alpha in alpha_list:
         #print(alpha)
         for i in range(numStep):
