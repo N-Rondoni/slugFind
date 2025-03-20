@@ -69,7 +69,9 @@ if __name__=="__main__":
     n = len(CI_Meas)
 
     # apply sigmoidal filter to help minimize noise
-    CI_Meas = sigmoid(CI_Meas) - 0.15
+    vs = 0.15
+    CI_Meas = sigmoid(CI_Meas) - vs
+    #if dset == 
 
     # set up timevec, recordings were resampled to 100 hz
     imRate = 1/100
@@ -101,7 +103,7 @@ if __name__=="__main__":
     alpha_list = np.arange(3, 40, 15)
     print(alpha_list)
 
-    gamma = 10 #dsets  6, ... require a higher value of gamma or alpha will go negative. 
+    gamma = 1 #dsets  6, ... require a higher value of gamma or alpha will go negative. A RESULT OF forgetting vertical shift
 
     error_prev = 0
     error_min = 100
@@ -129,16 +131,16 @@ if __name__=="__main__":
             grad_X = sol.y[2, :]
             grad_Z = sol.y[3, :]
        
-            CiF_f = sigmoid(CiF_f) 
+            CiF_f = sigmoid(CiF_f) - vs
             
             timeStep = timeVec[1] - timeVec[0]
             
             ga_L = np.sum(-2*(CI_Meas - CiF_f)*grad_Z*timeStep) 
             #print("gradient wrt alpha", ga_L)
             # step
-            rho = 5.5  # learning rate
+            rho = 1  # learning rate
             alpha = alpha - rho*ga_L
-            #gamma = gamma - rho*gL
+        
             
             print("alpha:", alpha)
 

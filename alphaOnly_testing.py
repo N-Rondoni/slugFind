@@ -79,11 +79,13 @@ if __name__=="__main__":
     kf, kr, alpha, gamma, L = paramValues(dset, CiF_0)
 
     #alpha = 1.14916717 # dset 1, requires gamma 1
-    alpha = 42.57296027 # dset 1, requires gamma 10
+    #alpha = 42.57296027 # dset 1, requires gamma 10
+    #alpha = 56.0113801 # good for dset 5
     #alpha = 8.6160731  # dset 3, requires gamma 1
     #alpha = 19.65693565 # dset 6, requires gamma 10
-    gamma = 10 # dsets 6, ... require gamma to be upped. 
+    gamma = 1 # dsets 6, ... require gamma to be upped. 
     #gamma = 1
+    alpha =  23.4181404221457
 
     kf = 0.1
     kr = 10
@@ -180,7 +182,7 @@ if __name__=="__main__":
     Ci_f = L - CiF_f
 
     # sigmoid calcium indicator so it is comoparable to calcium ion. 
-    CiF_f = sigmoid(CiF_f)
+    CiF_f = sigmoid(CiF_f) #- .15
 
     # transpose
     sol = np.transpose(mpc.data['_x'])
