@@ -115,7 +115,7 @@ if __name__=="__main__":
     #kr = 4
     alpha = np.random.uniform(5, 20)
     kr = np.random.uniform(2,10)
-    alpha = 0.5
+    alpha = 20
     kr = 2
 
     gamma = 10
@@ -155,8 +155,8 @@ if __name__=="__main__":
         # compute gradient w.r.t each param, the same??
 
         # step
-        rho_alpha = 1  # learning rates
-        rho_kr =  1    # learning rate
+        rho_alpha = 5  # learning rates
+        rho_kr =  2   # learning rate
         alpha = alpha - rho_alpha*g_L_alpha
         kr = kr - rho_kr*g_L_kr
     

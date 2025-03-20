@@ -98,7 +98,8 @@ if __name__=="__main__":
     kr = 10
 
     alpha = np.random.uniform(1, 30)
-    alpha_list = np.arange(3, 30, 10)
+    alpha_list = np.arange(3, 40, 15)
+    print(alpha_list)
 
     gamma = 10 #dsets  6, ... require a higher value of gamma or alpha will go negative. 
 
@@ -129,9 +130,10 @@ if __name__=="__main__":
             grad_Z = sol.y[3, :]
        
             CiF_f = sigmoid(CiF_f) 
-
             
-            ga_L = np.sum(-2*(CI_Meas - CiF_f)*grad_Z*0.01) 
+            timeStep = timeVec[1] - timeVec[0]
+            
+            ga_L = np.sum(-2*(CI_Meas - CiF_f)*grad_Z*timeStep) 
             #print("gradient wrt alpha", ga_L)
             # step
             rho = 5.5  # learning rate
@@ -150,22 +152,22 @@ if __name__=="__main__":
             if error_current < error_min:
                 error_min = error_current
                 alpha_best = alpha
-            if (i+1) % 100 == 0:
+            if (i+1) % numStep == 0:
                 alpha_fin = alpha
                 paramsOut = np.append(paramsOut, alpha_fin)
-               
+
             print("2norm of measured calcium tracking tracking:", error_current)
             print("difference in error between previous step:", error_dif)
             print("MSE of measured calcium tracking tracking:", error_MSE)
-            print("Raw Differences, summed", np.sum((CI_Meas - CiF_f)**2)*.01)
-            print("#_____________________________#")
+            #print("Raw Differences, summed", np.sum((CI_Meas - CiF_f)**2)*timeStep)
+            print("#____________________________________________________________________#")
     
     print("Min error found: ", error_min)
     print("Created by using alpha = ", alpha_best,"gamma = ", gamma,  "kf = ", kf, "kr = ", kr)
     # prepend best alpha to paramsOut
     paramsOut = np.insert(paramsOut, 0, alpha_best, axis=0)
     print(paramsOut)
-    saveLoc = 'data/paramEstimation/alphas_node'+ str(row) + '_dset' + str(dset) + '.' + str(stat) + '_params'
+    saveLoc = 'data/paramEstimation/alphas_node'+ str(row) + '_dset' + str(dset) + '.' + str(stat) + '_params_' + 'gamma_'+ str(gamma) +  'kf_' + str(kf) + 'kr_' + str(kr)
 
     np.save(saveLoc, paramsOut)
 
