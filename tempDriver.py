@@ -21,9 +21,9 @@ status = ['train', "test"]
 
 for stat in status:
     if stat == 'train':
-        dsets = [8, 9] # there are more training sets than test sets. 
+        dsets = [8] # there are more training sets than test sets. 
     else:
-        dsets = [1, 23, 4, 5]
+        dsets = [1, 2, 3, 4, 5]
 
     for dset in dsets:
         # load in data so you know how many rows are in a dset

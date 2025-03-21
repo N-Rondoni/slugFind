@@ -85,8 +85,8 @@ if __name__=="__main__":
     if dset == 8:  
         alpha = 55.83 # dset 8
     if dset == 9:
-        alpha = 1.7734794306742592 # dset 9 
-
+        #alpha = 1.7734794306742592 # dset 9 
+        alpha = 21.71118311993751
    
     tstep = 1/100 # tstep of solver, can be reworked to be different from imRate, requires interpolation. 
    

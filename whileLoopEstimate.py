@@ -102,6 +102,7 @@ if __name__=="__main__":
     alpha = np.random.uniform(1, 30)
     alpha_list = np.arange(3, 40, 15)
     print(alpha_list)
+    alpha_list[0] = 50
 
     gamma = 1 #dsets  6, ... require a higher value of gamma or alpha will go negative. A RESULT OF forgetting vertical shift
 
