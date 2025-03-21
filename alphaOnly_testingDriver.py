@@ -16,14 +16,14 @@ python3 MPCmain.py 0 1 test
 dsets = [1, 2, 3, 4, 5]
 status = ['test', 'train'] 
 
-status = ['train'] 
+
 
 
 for stat in status:
     if stat == 'train':
-        dsets = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] # there are more training sets than test sets. 
+        dsets = [1, 2, 3, 4, 5, 6, 7, 10, 8, 9] # there are more training sets than test sets. 
     else:
-        dsets = [1, 2, 3, 4, 5]
+        dsets = [3, 4, 5]
 
     for dset in dsets:
         # load in data so you know how many rows are in a dset
@@ -47,9 +47,9 @@ for stat in status:
                 print("This neuron's data contained NaNs! Solving up until NaNs begin... ") 
                 
             # run solver, if NaNs present main will simulate up until they begin. 
-            os.system("python3 alphaOnly_estimateParams.py " + str(i) + " " + str(dset) + " " + str(stat))
+            os.system("python3 alphaOnly_testing.py " + str(i) + " " + str(dset) + " " + str(stat))
             end = time.time()
             print("previous solve for neuron", i, "completed in", (end - start)/60, "minutes")
             print("------------------------------------------------------------------------")
-            #i = i + 1
+            i = i + 1
 

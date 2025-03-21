@@ -19,7 +19,7 @@ for stat in states:
     if stat == 'test':
         dsets = [1, 2, 3, 4, 5]
     if stat == 'train':
-        dsets = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+        dsets = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
         
     for dset in dsets:
         # load in true spikes

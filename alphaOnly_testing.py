@@ -19,7 +19,7 @@ import seaborn as sns
 from datetime import date
 import spikefinder_eval as se
 from spikefinder_eval import _downsample
-from parameterUtils import paramValues
+from parameterUtils import paramValues, learnedParams
 
 def tvp_fun(t_now):
     for k in range(n_horizon + 1):
@@ -78,17 +78,11 @@ if __name__=="__main__":
     # pull dset dependent params from parameterUtils.py
     kf, kr, alpha, gamma, L = paramValues(dset, CiF_0)
 
-    #alpha = 1.14916717 # dset 1, requires gamma 1
-    #alpha = 42.57296027 # dset 1, requires gamma 10
-    #alpha = 56.0113801 # good for dset 5
-    #alpha = 8.6160731  # dset 3, requires gamma 1
-    #alpha = 19.65693565 # dset 6, requires gamma 10
     gamma = 1 # dsets 6, ... require gamma to be upped. 
-    #gamma = 1
-    alpha =  23.4181404221457
-
     kf = 0.1
     kr = 10
+    alpha = learnedParams(dset)
+
    
     tstep = 1/100 # tstep of solver, can be reworked to be different from imRate, requires interpolation. 
    
