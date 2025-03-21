@@ -82,7 +82,11 @@ if __name__=="__main__":
     kf = 0.1
     kr = 10
     alpha = learnedParams(dset)
-    alpha = 55.83
+    if dset == 8:  
+        alpha = 55.83 # dset 8
+    if dset == 9:
+        alpha = 1.7734794306742592 # dset 9 
+
    
     tstep = 1/100 # tstep of solver, can be reworked to be different from imRate, requires interpolation. 
    
@@ -216,6 +220,6 @@ if __name__=="__main__":
     # compute correlation coefficient 
     corrCoef = np.corrcoef(s[100:], spikeDat[100:])[0, 1] # toss first second of recording, can contain bad transient dynamics
     print("Corr Coef:", corrCoef)
-    print("Last 100 s vals:", s[-1:-100])
-    print(s[-1:100] == 1)
+    #print("Last 100 s vals:", s[-1:-100])
+    #print(s[-1:100] == 1)
     
