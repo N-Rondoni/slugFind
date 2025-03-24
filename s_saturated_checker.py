@@ -14,7 +14,7 @@ import spikefinder_eval as se
 from spikefinder_eval import _downsample
 from VPdistance import VPdis
 
-save = True#False
+save = False
 ftype = "png"
 
 def plotCorrelations(factors, corrCoefs, neuron, dset):
@@ -102,15 +102,16 @@ def saturatedChecker(signal):
     endLen = 10
     last = signal[-endLen:-1]
     last = last/np.max(last)
-    counter = 0
-    print(last)
+    tracker = 0
+    #print(last)
     for ii in range(len(last)-1):
         dif = np.abs(last[ii] - last[ii+1])
         if dif < 0.001:
-            counter  = counter + 1
-            print("counter  hit!", counter)        
-    if counter >= int(2*endLen/3):
+            tracker  = tracker + 1
+            #print("tracker  hit!", counter)        
+    if tracker >= int(0.80*endLen):
         print("probably an issue here")
+    print(tracker)
 
 if __name__=="__main__":
    
@@ -172,7 +173,7 @@ if __name__=="__main__":
                     corrCoefs[j] = np.corrcoef(spikeDatDown, simSpikeDown)[0, 1] # toss first 200 time instants, contains bad transients.
                     print('dset:', dset, 'neuron:', i, "corr:", corrCoefs[0])
             
-                    #saturatedChecker(simSpikeDown)
+                    saturatedChecker(simSpikeDown)
 
                     # split Victur-Purpura computations into two (can run on subsets then add results, getting same score). VPD(a + b) = VPD(a) + VPD(b)
                     # this must be done for certain data sets if you have less than 16GB ram.    
