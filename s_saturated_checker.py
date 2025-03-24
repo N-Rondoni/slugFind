@@ -14,7 +14,7 @@ import spikefinder_eval as se
 from spikefinder_eval import _downsample
 from VPdistance import VPdis
 
-save = False
+save = True#False
 ftype = "png"
 
 def plotCorrelations(factors, corrCoefs, neuron, dset):
@@ -44,7 +44,7 @@ def plotCorrelations(factors, corrCoefs, neuron, dset):
     ax2.set_xlabel("Bin width (ms)", fontsize=20)
    
     fig.tight_layout()
-    #plt.show()
+    plt.show()
 
     print('dset:', dset, 'neuron:', neuron, "corr:", corrCoefs[0])
     if save == True:
@@ -65,7 +65,7 @@ def plotSignalsSubset(t, simSignal, trueSignal, sStart, sStop, neuron, dset):
         filename = 'Spikes_subset_dset'+ str(dset) + "_neuron" + str(neuron)
         plt.savefig(filename + '.' + ftype, format = ftype)
         
-def plotSignals(t, simSignal, trueSignal, neuron, dset):
+def plotSignals(t, simSignal, trueSignal, neuron, dset, stat):
     plt.figure()
     plt.plot(t, simSignal, label=r'Simulated Rate')
     plt.plot(t, trueSignal, label="Recorded Spike Rate", alpha = 0.8)
@@ -77,7 +77,8 @@ def plotSignals(t, simSignal, trueSignal, neuron, dset):
     if save == True:
         filename = 'Spikes_fullSolve_dset'+ str(dset) + "_neuron" + str(neuron)
         plt.savefig(filename + '.' + ftype, format = ftype)
-       
+        os.system("mv "+ filename + "." + ftype + " /Users/nrondoni/Pictures/spikeFinder/" + stat) # only use this photo location if you are Nick  
+        os.system("rm *.png")
 
 def NaNChecker(dset, row, stat):
     # check for NaNs in calcium dataset
@@ -97,6 +98,19 @@ def NaNChecker(dset, row, stat):
     return NaNpresent 
 
 
+def saturatedChecker(signal):
+    endLen = 10
+    last = signal[-endLen:-1]
+    last = last/np.max(last)
+    counter = 0
+    print(last)
+    for ii in range(len(last)-1):
+        dif = np.abs(last[ii] - last[ii+1])
+        if dif < 0.001:
+            counter  = counter + 1
+            print("counter  hit!", counter)        
+    if counter >= int(2*endLen/3):
+        print("probably an issue here")
 
 if __name__=="__main__":
    
@@ -158,7 +172,7 @@ if __name__=="__main__":
                     corrCoefs[j] = np.corrcoef(spikeDatDown, simSpikeDown)[0, 1] # toss first 200 time instants, contains bad transients.
                     print('dset:', dset, 'neuron:', i, "corr:", corrCoefs[0])
             
-                      
+                    #saturatedChecker(simSpikeDown)
 
                     # split Victur-Purpura computations into two (can run on subsets then add results, getting same score). VPD(a + b) = VPD(a) + VPD(b)
                     # this must be done for certain data sets if you have less than 16GB ram.    
@@ -208,7 +222,7 @@ if __name__=="__main__":
                 #plotSignalsSubset(t_f, simSpikeDown, spikeDatDown, subStart, subStop, neuron, dset) # UNCOMMENT TO PLOT DOWNSAMPLED VALUES
                 subStart, subStop = 2000, 4000
                 
-                #plotSignals(timeVec, simSpikesRaw, spikeDatRaw, neuron, dset)
+                plotSignals(timeVec, simSpikesRaw, spikeDatRaw, neuron, dset, stat)
                 
 
                 #plotSignalsSubset(timeVec, simSpikesRaw, spikeDatRaw, subStart, subStop, neuron, dset)
