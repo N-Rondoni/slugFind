@@ -51,7 +51,7 @@ if __name__=="__main__":
     n = len(CI_Meas)
 
     # apply sigmoidal filter to help minimize noise
-    CI_Meas = sigmoid(CI_Meas) - 0.15
+    CI_Meas = sigmoid(CI_Meas) - 0.35 #0.25 by default. If not fixed, go to .35
 
     # set up timevec, recordings were resampled to 100 hz
     imRate = 1/100
@@ -179,7 +179,7 @@ if __name__=="__main__":
     # compute quantity of calcium indicator unbound (not fluoresced)
     Ci_f = L - CiF_f
 
-    # sigmoid calcium indicator so it is comoparable to calcium ion. 
+    # sigmoid calcium indicator so it is comparable to calcium ion. 
     CiF_f = sigmoid(CiF_f) #- .15
 
     # transpose

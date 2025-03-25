@@ -57,7 +57,7 @@ plt.text(np.mean(cors)*.89, max_ylim*0.9, 'Mean: {:.2f}'.format(np.mean(cors)))
 plt.text(stmMeanCor*1.01, max_ylim*0.9, 'STM Mean: {:.2f}'.format(float(stmMeanCor)), color = 'r')
 plt.text(oasisMeanCorInfo*1.01, max_ylim*0.5, 'Oasis Mean: {:.2f}'.format(float(oasisMeanCorInfo)), color = oasisInfoColor)
 plt.text(oasisMeanCorNoInfo*.8, max_ylim*0.9, 'Oasis* Mean: {:.2f}'.format(float(oasisMeanCorNoInfo)), color = oasisNoInfoColor)
-
+print("mean", np.mean(cors))
 
 # plotting VP distances
 oasisVPDmedian = 901.39 
@@ -87,14 +87,30 @@ stm_df = df[(df['algo'] == 'stm')]
 print("stm average on test data:", stm_df['value'].mean()) # used to place mean line in earlier plot
 
 
+# trying other file, this is an alternative (and maybe more intuitive way) to pull df for a
+                                                                        # partiular method 
 
-stm_df = pcc(file_path2, 'stm')
+#df2 = pd.read_csv(file_path2)  
+#df2 = df2.reset_index(drop=True)
+# Filter for algo_algorithm == 'stm' and label_label == 'corr'
+#filtered_df = df2[(df2['algo_algorithm'] == 'stm') & (df2['label_label'] == 'corr')]
+
+
+
+# Compute mean of label_value
+#print("stm average on test and train data, all csv:", filtered_df['label_value'].mean())
+
+#sys.exit()
+
+stm_df = pcc(file_path2, 'stm') # pulls all data, test and train, 
+
+
 
 j = 0
 runSum = 0
 accumed = []
 for key in stm_df:
-    #print(key)
+    print(key)
     temp = stm_df[key]
     res = float(temp[0])
     accumed = np.append(accumed, res)
