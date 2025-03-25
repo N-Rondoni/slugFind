@@ -88,38 +88,34 @@ stm_df = df[(df['algo'] == 'stm')]
 print("stm average on test data:", stm_df['value'].mean()) # used to place mean line in earlier plot
 
 
-# trying other file, this is an alternative (and maybe more intuitive way) to pull df for a
-                                                                        # partiular method 
-
-#df2 = pd.read_csv(file_path2)  
+# This is an alternative (and maybe more intuitive way) to pull df for partiular method 
+# ends up functionally equivalent to what is done with function pcc
+df2 = pd.read_csv(file_path2)
 #df2 = df2.reset_index(drop=True)
 # Filter for algo_algorithm == 'stm' and label_label == 'corr'
-#filtered_df = df2[(df2['algo_algorithm'] == 'stm') & (df2['label_label'] == 'corr')]
-
-
-
+filtered_df = df2[(df2['algo_algorithm'] == 'stm') & (df2['label_label'] == 'corr')]
 # Compute mean of label_value
-#print("stm average on test and train data, all csv:", filtered_df['label_value'].mean())
-
-#sys.exit()
-
-stm_df = pcc(file_path2, 'stm') # pulls all data, test and train, 
+print("stm average on test and train data, all csv:", filtered_df['label_value'].mean())
+print("stm median on test and train data, all csv:", filtered_df['label_value'].median())
 
 
 
-j = 0
-runSum = 0
-accumed = []
-for key in stm_df:
-    print(key)
-    temp = stm_df[key]
-    res = float(temp[0])
-    accumed = np.append(accumed, res)
-    runSum = runSum + res
-    j = j + 1
+stm_df = pcc(file_path2, 'stm') # pulls all data, test and train
 
-print("average for stm across all datasets:", runSum/j)
-print("median across all for stm:", np.median(accumed))
+# can also do the above mean, median calls with the below logic. 
+#j = 0
+#runSum = 0
+#accumed = []
+#for key in stm_df:
+#    #print(key)
+#    temp = stm_df[key]
+#    res = float(temp[0])
+#    accumed = np.append(accumed, res)
+#    runSum = runSum + res
+#   j = j + 1
+
+#print("average for stm across all datasets:", runSum/j)
+#print("median across all for stm:", np.median(accumed))
 print("stm dset 7 mean:", float(stm_df['7.train.spikes'][0]))
 print("stm dset 3 mean:", float(stm_df['3.test.spikes'][0]))
 
