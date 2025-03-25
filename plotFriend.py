@@ -24,16 +24,17 @@ cors6 =  np.load("data/allScoresDset6.npy")
 cors7 =  np.load("data/allScoresDset7.npy")
 cors8 =  np.load("data/allScoresDset8.npy")
 cors9 =  np.load("data/allScoresDset9.npy")
+cors10 = np.load("data/allScoresDset10.npy")
 allVPDs = np.load("data/allVPDs.npy")
 
 
 
-labels = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "All"]
+labels = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10","All"]
 plt.figure(1)
 plt.title(r"Correlation scores by data set, $n_{all} = $" + str(np.shape(cors)[0]), fontsize = 18)
 plt.xlabel("Data Set", fontsize = 14)
 plt.ylabel("Correlation Coefficient", fontsize = 14)
-plt.boxplot([cors1, cors2, cors3, cors4, cors5, cors6, cors7, cors8, cors9, cors], labels = labels) #labels depreciated, will break in newer ver
+plt.boxplot([cors1, cors2, cors3, cors4, cors5, cors6, cors7, cors8, cors9, cors10, cors], labels = labels) #labels depreciated, will break in newer ver
 
 
 plt.figure(3)
@@ -266,11 +267,10 @@ figNo = figNo + 1
 
 # violin plot with color median
 fig, axs = plt.subplots()
-parts = axs.violinplot([cors1, cors2, cors3, cors4, cors5, cors6, cors7, cors8, cors9, cors], showmeans=False, showmedians=True)
+parts = axs.violinplot([cors1, cors2, cors3, cors4, cors5, cors6, cors7, cors8, cors9, cors10, cors], showmeans=False, showmedians=True)
 parts['cmedians'].set_color('deeppink')
 axs.set_title("Violin Plot of Correlation Coefficient by Dataset", fontsize = 18)
-axs.set_xticks([y + 1 for y in range(len([cors1, cors2, cors3, cors4, cors5, cors6, cors7, cors8, cors9, cors]))],
-                  labels=labels)
+axs.set_xticks([y + 1 for y in range(len([cors1, cors2, cors3, cors4, cors5, cors6, cors7, cors8, cors9, cors10, cors]))], labels=labels)
 axs.set_ylabel("Correlation Coefficient", fontsize = 14)
 axs.set_xlabel("Dataset", fontsize = 14)
 axs.yaxis.grid(True)
