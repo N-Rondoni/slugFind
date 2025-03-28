@@ -100,6 +100,13 @@ print("stm median on test and train data, all csv:", filtered_df['label_value'].
 print("filtered_DF", filtered_df)
 
 
+oasis_df =df2[(df2['algo_algorithm'] == 'linear gaussian') & (df2['label_label'] == 'corr')]
+#print(oasis_df)
+#print(oasis_df['label_value'].mean())
+#nonan = oasis_df['label_value']
+#nonan = nonan[~np.isnan(nonan)]
+#print(nonan.mean())
+
 stm_df = pcc(file_path2, 'stm') # pulls all data, test and train
 #print("stm_df", stm_df)
 # can also do the above mean, median calls with the below logic. 
