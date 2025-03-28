@@ -97,11 +97,11 @@ filtered_df = df2[(df2['algo_algorithm'] == 'stm') & (df2['label_label'] == 'cor
 # Compute mean of label_value
 print("stm average on test and train data, all csv:", filtered_df['label_value'].mean())
 print("stm median on test and train data, all csv:", filtered_df['label_value'].median())
-
+print("filtered_DF", filtered_df)
 
 
 stm_df = pcc(file_path2, 'stm') # pulls all data, test and train
-
+#print("stm_df", stm_df)
 # can also do the above mean, median calls with the below logic. 
 #j = 0
 #runSum = 0
@@ -118,6 +118,11 @@ stm_df = pcc(file_path2, 'stm') # pulls all data, test and train
 #print("median across all for stm:", np.median(accumed))
 print("stm dset 7 mean:", float(stm_df['7.train.spikes'][0]))
 print("stm dset 3 mean:", float(stm_df['3.test.spikes'][0]))
+
+
+#print("filtered df min", filtered_df)
+#print("dset 5 min", np.min(stm_df['9.train.spikes']))
+#print("AAAAAAAAA IS GOD REAL", stm_df['9.train.spikes'])
 
 
 

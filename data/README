@@ -1,0 +1,22 @@
+This immediate folder is populated with ground truth data,
+dataset.status.calcium.csv e.g., 1.test.calcium.csv contains ground truth calcium values used in the spikefinder challenge. 
+dataset.status.spikes.csv e.g., 1.test.spikes.csv contains simultaneously recorded ground truth spikes  used in spikefinder challenge.
+
+
+dataPrep.py simply stores the columns of this ground truth data (neurons) as individual files, for example
+node0_dset1.test.calcium.npy  would correspond to node 0 of test dataset 1, calcium recordings.
+This is done for easier processing downstream and reduced memory overhead (no need to load in neurons whose data we aren't working with.)
+These are saved in processed.
+
+stm and friedrich contain the resultant estimated spikes from the algorithms stm and oasis. These
+are used for comparison to the mpc approach's inferred spiking times.
+
+paramEstimation contains the parameters estimated by the auto-calibration functionality of this softwares implementation.
+
+
+processed also contains the folder solutions, in which spiking signals are stored by the mpc approach.
+For example, processed/solutions/node0_dset1.test.sVals.npy 
+contains the inferred spiking times via mpc from node 0, test dataset 1.
+
+
+

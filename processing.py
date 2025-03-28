@@ -14,7 +14,7 @@ import spikefinder_eval as se
 from spikefinder_eval import _downsample
 from VPdistance import VPdis
 
-save = False
+save = True#False
 ftype = "png"
 
 def plotCorrelations(factors, corrCoefs, neuron, dset):
@@ -44,7 +44,7 @@ def plotCorrelations(factors, corrCoefs, neuron, dset):
     ax2.set_xlabel("Bin width (ms)", fontsize=20)
    
     fig.tight_layout()
-    #plt.show()
+    plt.show()
 
     print('dset:', dset, 'neuron:', neuron, "corr:", corrCoefs[0])
     if save == True:
@@ -65,7 +65,7 @@ def plotSignalsSubset(t, simSignal, trueSignal, sStart, sStop, neuron, dset):
         filename = 'Spikes_subset_dset'+ str(dset) + "_neuron" + str(neuron)
         plt.savefig(filename + '.' + ftype, format = ftype)
         
-def plotSignals(t, simSignal, trueSignal, neuron, dset):
+def plotSignals(t, simSignal, trueSignal, neuron, dset, stat):
     plt.figure()
     plt.plot(t, simSignal, label=r'Simulated Rate')
     plt.plot(t, trueSignal, label="Recorded Spike Rate", alpha = 0.8)
@@ -77,7 +77,7 @@ def plotSignals(t, simSignal, trueSignal, neuron, dset):
     if save == True:
         filename = 'Spikes_fullSolve_dset'+ str(dset) + "_neuron" + str(neuron)
         plt.savefig(filename + '.' + ftype, format = ftype)
-       
+        os.system("mv "+ filename + "." + ftype + " /Users/nrondoni/Pictures/spikeFinder/" + stat) # only use this photo location if you are Nick  
 
 def NaNChecker(dset, row, stat):
     # check for NaNs in calcium dataset
@@ -97,6 +97,20 @@ def NaNChecker(dset, row, stat):
     return NaNpresent 
 
 
+def saturatedChecker(signal):
+    endLen = 10
+    last = signal[-endLen:-1]
+    last = last/np.max(last)
+    tracker = 0
+    #print(last)
+    for ii in range(len(last)-1):
+        dif = np.abs(last[ii] - last[ii+1])
+        if dif < 0.001:
+            tracker  = tracker + 1
+            #print("tracker  hit!", counter)        
+    if tracker >= int(0.80*endLen):
+        print("probably an issue here")
+    #print(tracker)
 
 if __name__=="__main__":
    
@@ -114,6 +128,7 @@ if __name__=="__main__":
     downsampledCorScor7 = []
     downsampledCorScor8 = []
     downsampledCorScor9 = []
+    downsampledCorScor10 = []
     allVPDs = []
 
     for stat in states:
@@ -121,7 +136,7 @@ if __name__=="__main__":
         dsets = [1, 2, 3, 4, 5]
         if stat == "train":
             #dsets = [1, 2, 3, 4, 5, 6, 7, 8, 9]
-            dsets = [1, 2, 3, 4, 5, 6, 7, 8, 10, 9]
+            dsets = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
         for dset in dsets:
             # load in true spikes
@@ -141,7 +156,7 @@ if __name__=="__main__":
             
                 nSpike = np.shape(spikeDatRaw)[0]
                 n = np.shape(simSpikesRaw)[0]
-        
+                
 
                 finalTime = n*(imRate)
                                
@@ -157,12 +172,14 @@ if __name__=="__main__":
                     simSpikeDown = _downsample(simSpikesRaw, factor)
                     corrCoefs[j] = np.corrcoef(spikeDatDown, simSpikeDown)[0, 1] # toss first 200 time instants, contains bad transients.
                     print('dset:', dset, 'neuron:', i, "corr:", corrCoefs[0])
+            
+                    saturatedChecker(simSpikeDown)
 
                     # split Victur-Purpura computations into two (can run on subsets then add results, getting same score). VPD(a + b) = VPD(a) + VPD(b)
                     # this must be done for certain data sets if you have less than 16GB ram.    
                     Nreduced = int(len(spikeDatDown)/2)
-                    VPDtemp1 = VPdis(spikeDatDown[0:Nreduced], simSpikeDown[0:Nreduced], 1) 
-                    VPDtemp2 = VPdis(spikeDatDown[Nreduced:-1], simSpikeDown[Nreduced:-1], 1) 
+                    VPDtemp1 = 0#VPdis(spikeDatDown[0:Nreduced], simSpikeDown[0:Nreduced], 1) 
+                    VPDtemp2 = 0#VPdis(spikeDatDown[Nreduced:-1], simSpikeDown[Nreduced:-1], 1) 
                     sumVPD = VPDtemp1 + VPDtemp2
                     VPDs[j] = sumVPD                    
                 
@@ -200,13 +217,16 @@ if __name__=="__main__":
                     downsampledCorScor8 = np.append(downsampledCorScor8, corrCoefs[0])
                 if dset == 9:
                     downsampledCorScor9 = np.append(downsampledCorScor9, corrCoefs[0])
-               
+                if dset == 10:
+                    downsampledCorScor10 = np.append(downsampledCorScor10, corrCoefs[0])
+
+
                 #plotSignals(t_down[50:], simSpikeDown[50:], spikeDatDown[50:], neuron, dset) # THESE ARE DOWNSAMPLES VALUES
                 #subStart, subStop = 200, 400
                 #plotSignalsSubset(t_f, simSpikeDown, spikeDatDown, subStart, subStop, neuron, dset) # UNCOMMENT TO PLOT DOWNSAMPLED VALUES
                 subStart, subStop = 2000, 4000
                 
-                #plotSignals(timeVec, simSpikesRaw, spikeDatRaw, neuron, dset)
+                plotSignals(timeVec, simSpikesRaw, spikeDatRaw, neuron, dset, stat)
                 
 
                 #plotSignalsSubset(timeVec, simSpikesRaw, spikeDatRaw, subStart, subStop, neuron, dset)
@@ -220,8 +240,9 @@ if __name__=="__main__":
 
     print("All cors:", downsampledCorScor)
     print("Median of whole set:", np.median(downsampledCorScor))
-    print("All VP distances:", allVPDs)
-    np.save("data/allVPDs", allVPDs)
+    print("Mean of whole set:", np.mean(downsampledCorScor))
+    #print("All VP distances:", allVPDs)
+    #np.save("data/allVPDs", allVPDs)
     np.save("data/allScores", downsampledCorScor)
     np.save("data/allScoresDset1", downsampledCorScor1)
     np.save("data/allScoresDset2", downsampledCorScor2)
@@ -232,7 +253,8 @@ if __name__=="__main__":
     np.save("data/allScoresDset7", downsampledCorScor7)
     np.save("data/allScoresDset8", downsampledCorScor8)
     np.save("data/allScoresDset9", downsampledCorScor9)
+    np.save("data/allScoresDset10", downsampledCorScor10)
 
-    print(allVPDs)
+    #print(allVPDs)
     #plt.show()
 
