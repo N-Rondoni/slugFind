@@ -187,6 +187,18 @@ if __name__=="__main__":
                 else:
                     subsetAmount = np.max(np.shape(spikeDatRaw))
 
+
+                #naninds2 = np.isnan(simSpikesRaw)
+                #NaNpresent = np.any(naninds2)
+                #if NaNpresent == True:
+                #    subsetAmount2 = ((np.where(naninds2 == True))[0][0]) - 1 #index of first Nan, less one. THIS MAY BE PULLING THE LAST NAN OR SOMETHING? 
+                #else:
+                #    subsetAmount2 = np.max(np.shape(simSpikesRaw))
+                
+               # print("***", subsetAmount, subsetAmount2)
+               # subsetAmount = subsetAmount2
+
+
                 simSpikesRaw = simSpikesRaw[:subsetAmount]
                 spikeDatRaw = spikeDatRaw[:subsetAmount]
                  
@@ -216,8 +228,8 @@ if __name__=="__main__":
                     # split Victur-Purpura computations into two (can run on subsets then add results, getting same score). VPD(a + b) = VPD(a) + VPD(b)
                     # this must be done for certain data sets if you have less than 16GB ram.    
                     Nreduced = int(len(spikeDatDown)/2)
-                    VPDtemp1 = 0#VPdis(spikeDatDown[0:Nreduced], simSpikeDown[0:Nreduced], 1) 
-                    VPDtemp2 = 0#VPdis(spikeDatDown[Nreduced:-1], simSpikeDown[Nreduced:-1], 1) 
+                    VPDtemp1 = VPdis(spikeDatDown[0:Nreduced], simSpikeDown[0:Nreduced], 1) 
+                    VPDtemp2 = VPdis(spikeDatDown[Nreduced:-1], simSpikeDown[Nreduced:-1], 1) 
                     sumVPD = VPDtemp1 + VPDtemp2
                     VPDs[j] = sumVPD                    
                 
@@ -280,7 +292,31 @@ if __name__=="__main__":
     print("Median of whole set:", np.median(downsampledCorScor))
     print("Mean of whole set:", np.mean(downsampledCorScor))
     #print("All VP distances:", allVPDs)
-    #np.save("data/allVPDs", allVPDs)
+    np.save("data/stm_allVPDs", allVPDs)
+    first5 = []
+    first5 = np.append(first5, downsampledCorScor1)
+    first5 = np.append(first5, downsampledCorScor2)
+    first5 = np.append(first5, downsampledCorScor3)
+    first5 = np.append(first5, downsampledCorScor4)
+    first5 = np.append(first5, downsampledCorScor5)
+
+    genie5 = []
+    genie5 = np.append(genie5, downsampledCorScor6)
+    genie5 = np.append(genie5, downsampledCorScor7)
+    genie5 = np.append(genie5, downsampledCorScor8)
+    genie5 = np.append(genie5, downsampledCorScor9)
+    genie5 = np.append(genie5, downsampledCorScor10)
+
+
+    print("spikefinder 5 mean", np.mean(first5))
+    print("spikefidner 5 median", np.median(first5))
+
+    print("Genie mean from STM", np.mean(genie5))
+    print("Genie median from STM", np.median(genie5))
+
+
+
+
     np.save("data/allScoresSTM", downsampledCorScor)
     #np.save("data/allScoresDset1", downsampledCorScor1)
     #np.save("data/allScoresDset2", downsampledCorScor2)

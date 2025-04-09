@@ -151,84 +151,63 @@ if __name__=="__main__":
                         
             
             # load in STM data
-            #simDatRawSTM = pd.read_csv('data/stm/' + str(dset) + '.' + str(stat) + '.spikes.csv').T 
-            #simDatRawSTM = np.array(simDatRawSTM)
+            simDatRawSTM = pd.read_csv('data/stm/' + str(dset) + '.' + str(stat) + '.spikes.csv').T 
+            simDatRawSTM = np.array(simDatRawSTM)
             # load in Oasis data
             simDatRawOasis = pd.read_csv('data/friedrich/' + str(dset) + '.' + str(stat) + '.spikes.csv').T 
-            simDatRawOasis = np.array(simDatRawOasis)
+            simDatRawOasis = np.array(simDatRawSTM)
 
             imRate = 1/100
                     
             i = 0
             while i < mSpike:
                 spikeDatRaw = np.load('data/processed/node' + str(i) + '_dset' + str(dset) + '.' + str(stat) + '.spikes.npy')
-                #simSpikesRaw = np.load('data/processed/solutions/node' + str(i) + '_dset' + str(dset) + '.' + str(stat) + '.sVals.npy')
-                #simSpikesRawSTM = simDatRawSTM[i]
+                simSpikesRaw = np.load('data/processed/solutions/node' + str(i) + '_dset' + str(dset) + '.' + str(stat) + '.sVals.npy')
+                simSpikesRawSTM = simDatRawSTM[i]
                 simSpikesRawOasis = simDatRawOasis[i]
                 spikeDatRawNans = spikeDat[i] # my spikeDatRaw has had nans removed in a preprocess step, the other methods leave them in. 
 
 
-                #print("STM shape", np.shape(simSpikesRawSTM))
+                print("STM shape", np.shape(simSpikesRawSTM))
                 print("Oasis shape", np.shape(simSpikesRawOasis))
-                #print("My shape", np.shape(simSpikesRaw))
-                #print("raw shape, w Nans", np.shape(spikeDatRawNans))
-                #print(simSpikesRawOasis[-10:-1])
+                print("My shape", np.shape(simSpikesRaw))
+                print("raw shape, w Nans", np.shape(spikeDatRawNans))
+                print(simSpikesRawSTM[-10:-1])
 
                 # This file should be a single function tht is pointed at other files.
-                simSpikesRaw = simSpikesRawOasis   # point to either this, your files, or Oasis
+                simSpikesRaw = simSpikesRawSTM   # point to either this, your files, or Oasis
                 spikeDatRaw = spikeDat[i]
                 #
 
                 # this NaN logic is handled in my preprocessing step. 
-                naninds = np.isnan(spikeDatRaw) 
-                #naninds = np.isnan(spikeDatRawNans)
-                #naninds = np.isnan(simSpikesRawOasis) #these should coincide, but they don't. 
-
+                naninds = np.isnan(spikeDatRaw)
                 NaNpresent = np.any(naninds)
                 if NaNpresent == True:
-                    subsetAmount = ((np.where(naninds == True))[0][0]) - 1 #index of first Nan, less one. THIS MAY BE PULLING THE LAST NAN OR SOMETHING? 
+                    subsetAmount = ((np.where(naninds == True))[0][0]) - 1 #index of first Nan, less one. 
                 else:
                     subsetAmount = np.max(np.shape(spikeDatRaw))
-                    
-                ###############
 
-                naninds2 = np.isnan(simSpikesRaw) # this confirms for oasis these have varying nan locations, for some reason
-                NaNpresent = np.any(naninds2)
-                if NaNpresent == True:
-                    subsetAmount2 = ((np.where(naninds2 == True))[0][0]) - 1 #index of first Nan, less one. THIS MAY BE PULLING THE LAST NAN OR SOMETHING? 
-                else:
-                    subsetAmount2 = np.max(np.shape(simSpikesRaw))
-            
+
+                #naninds2 = np.isnan(simSpikesRaw)
+                #NaNpresent = np.any(naninds2)
+                #if NaNpresent == True:
+                #    subsetAmount2 = ((np.where(naninds2 == True))[0][0]) - 1 #index of first Nan, less one. THIS MAY BE PULLING THE LAST NAN OR SOMETHING? 
+                #else:
+                #    subsetAmount2 = np.max(np.shape(simSpikesRaw))
                 
-                print("*** until first NaN: spikeDat, simSpikes", subsetAmount, subsetAmount2)
-                subsetAmount = subsetAmount2
+               # print("***", subsetAmount, subsetAmount2)
+               # subsetAmount = subsetAmount2
 
-                # usually needed 
-                #simSpikesRaw = simSpikesRaw[:subsetAmount]
-                #spikeDatRaw = spikeDatRaw[:subsetAmount]
+
+                simSpikesRaw = simSpikesRaw[:subsetAmount]
+                spikeDatRaw = spikeDatRaw[:subsetAmount]
                 
-
                 # a la Berens et al
-                naninds = np.isnan(spikeDatRaw) | np.isnan(simSpikesRaw)
-                spikeDatRaw = spikeDatRaw[~naninds]
-                simSpikesRaw = simSpikesRaw[~naninds]
+                #naninds = np.isnan(spikeDatRaw) | np.isnan(simSpikesRaw)
+                #spikeDatRaw = spikeDatRaw[~naninds]
+                #simSpikesRaw = simSpikesRaw[~naninds]
             
-                print(len(spikeDatRaw),len(simSpikesRaw))#, subsetAmount])
  
-                ml = min([len(spikeDatRaw),len(simSpikesRaw)])
-
-                ###
-    
-    
-                #simSpikesRaw = simSpikesRaw[~np.isnan(simSpikesRaw)]
-                #spikeDatRaw = spikeDatRawNans[~np.isnan(spikeDatRawNans)]
-                #print("a", np.shape(simSpikesRaw))
-
-                
-                
-
-                #print("b", np.shape(simSpikesRaw))
-                #print("Afer removal Oasis shape", np.shape(simSpikesRaw))
 
 
                 nSpike = np.shape(spikeDatRaw)[0]
@@ -236,9 +215,7 @@ if __name__=="__main__":
                 
 
                 finalTime = n*(imRate)
-                
-
-            
+                               
 
                 # create corr coeff
                 factors = [4] # can add more factors to this list if you'd like to see other downsampled values. Be careful!
@@ -250,19 +227,15 @@ if __name__=="__main__":
                     spikeDatDown = _downsample(spikeDatRaw, factor)
                     simSpikeDown = _downsample(simSpikesRaw, factor)
                     corrCoefs[j] = np.corrcoef(spikeDatDown, simSpikeDown)[0, 1]
-                    if np.isnan(corrCoefs[j]):
-                        print("neuron, dset, stat:", i, dset, stat)
-                        corrCoefs[j] = 0
-
                     print('dset:', dset, 'neuron:', i, "corr:", corrCoefs[0])
             
-                    #saturatedChecker(simSpikeDown)
+                    saturatedChecker(simSpikeDown)
 
                     # split Victur-Purpura computations into two (can run on subsets then add results, getting same score). VPD(a + b) = VPD(a) + VPD(b)
                     # this must be done for certain data sets if you have less than 16GB ram.    
                     Nreduced = int(len(spikeDatDown)/2)
-                    VPDtemp1 = VPdis(spikeDatDown[0:Nreduced], simSpikeDown[0:Nreduced], 1) 
-                    VPDtemp2 = VPdis(spikeDatDown[Nreduced:-1], simSpikeDown[Nreduced:-1], 1) 
+                    VPDtemp1 = 0#VPdis(spikeDatDown[0:Nreduced], simSpikeDown[0:Nreduced], 1) 
+                    VPDtemp2 = 0#VPdis(spikeDatDown[Nreduced:-1], simSpikeDown[Nreduced:-1], 1) 
                     sumVPD = VPDtemp1 + VPDtemp2
                     VPDs[j] = sumVPD                    
                 
@@ -281,7 +254,7 @@ if __name__=="__main__":
                 #plotCorrelations(factors, corrCoefs, neuron, dset)
                 downsampledCorScor = np.append(downsampledCorScor, corrCoefs[0])
                 allVPDs = np.append(allVPDs, VPDs[0])
-                #print("Victor-Purpura Distance:", VPDs[0])
+                print("Victor-Purpura Distance:", VPDs[0])
                 if dset == 1:
                     downsampledCorScor1 = np.append(downsampledCorScor1, corrCoefs[0])
                 if dset == 2:
@@ -320,27 +293,18 @@ if __name__=="__main__":
                 i = i + 1 
 
         print("average:", tempSum/counter)
-    
-    #downsampledCorScor[np.isnan(downsampledCorScor)] = 0 # set nan values for 0 temporarily for testing. 
-    #downsampledCorScor = downsampledCorScor[
+
     print("All cors:", downsampledCorScor)
     print("Median of whole set:", np.median(downsampledCorScor))
     print("Mean of whole set:", np.mean(downsampledCorScor))
-    
+    #print("All VP distances:", allVPDs)
+    #np.save("data/stm_allVPDs", allVPDs)
     first5 = []
     first5 = np.append(first5, downsampledCorScor1)
     first5 = np.append(first5, downsampledCorScor2)
     first5 = np.append(first5, downsampledCorScor3)
     first5 = np.append(first5, downsampledCorScor4)
     first5 = np.append(first5, downsampledCorScor5)
-    print("first 5 mean", np.mean(first5))
-    print("first 5 median", np.median(first5))
-    print("dset6 mean", np.mean(downsampledCorScor6))
-    print("dset7 mean", np.mean(downsampledCorScor7))
-    print("dset8 mean", np.mean(downsampledCorScor8))
-    print("dset9 mean", np.mean(downsampledCorScor9))
-    print("dset10 mean", np.mean(downsampledCorScor10))
-
 
     genie5 = []
     genie5 = np.append(genie5, downsampledCorScor6)
@@ -349,13 +313,17 @@ if __name__=="__main__":
     genie5 = np.append(genie5, downsampledCorScor9)
     genie5 = np.append(genie5, downsampledCorScor10)
 
-    print("Genie mean from Oasis", np.mean(genie5))
-    print("Genie median from Oasis", np.median(genie5))
+
+    print("spikefinder 5 mean", np.mean(first5))
+    print("spikefidner 5 median", np.median(first5))
+
+    print("Genie mean from STM", np.mean(genie5))
+    print("Genie median from STM", np.median(genie5))
 
 
-    #print("All VP distances:", allVPDs)
-    np.save("data/oasis_allVPDs", allVPDs)
-    np.save("data/allScoresOasis", downsampledCorScor)
+
+
+    np.save("data/allScoresSTM", downsampledCorScor)
     #np.save("data/allScoresDset1", downsampledCorScor1)
     #np.save("data/allScoresDset2", downsampledCorScor2)
     #np.save("data/allScoresDset3", downsampledCorScor3)

@@ -201,7 +201,8 @@ if __name__=="__main__":
             
                 
                 print("*** until first NaN: spikeDat, simSpikes", subsetAmount, subsetAmount2)
-                subsetAmount = subsetAmount2
+                
+                subsetAmount = min(subsetAmount2, subsetAmount)
 
                 # usually needed 
                 #simSpikesRaw = simSpikesRaw[:subsetAmount]
@@ -213,9 +214,9 @@ if __name__=="__main__":
                 spikeDatRaw = spikeDatRaw[~naninds]
                 simSpikesRaw = simSpikesRaw[~naninds]
             
-                print(len(spikeDatRaw),len(simSpikesRaw))#, subsetAmount])
+                #print(len(spikeDatRaw),len(simSpikesRaw))#, subsetAmount])
  
-                ml = min([len(spikeDatRaw),len(simSpikesRaw)])
+                #ml = min([len(spikeDatRaw),len(simSpikesRaw)])
 
                 ###
     
@@ -261,8 +262,8 @@ if __name__=="__main__":
                     # split Victur-Purpura computations into two (can run on subsets then add results, getting same score). VPD(a + b) = VPD(a) + VPD(b)
                     # this must be done for certain data sets if you have less than 16GB ram.    
                     Nreduced = int(len(spikeDatDown)/2)
-                    VPDtemp1 = VPdis(spikeDatDown[0:Nreduced], simSpikeDown[0:Nreduced], 1) 
-                    VPDtemp2 = VPdis(spikeDatDown[Nreduced:-1], simSpikeDown[Nreduced:-1], 1) 
+                    VPDtemp1 = 0#VPdis(spikeDatDown[0:Nreduced], simSpikeDown[0:Nreduced], 1) 
+                    VPDtemp2 = 0#VPdis(spikeDatDown[Nreduced:-1], simSpikeDown[Nreduced:-1], 1) 
                     sumVPD = VPDtemp1 + VPDtemp2
                     VPDs[j] = sumVPD                    
                 
@@ -354,7 +355,7 @@ if __name__=="__main__":
 
 
     #print("All VP distances:", allVPDs)
-    np.save("data/oasis_allVPDs", allVPDs)
+    #np.save("data/oasis_allVPDs", allVPDs)
     np.save("data/allScoresOasis", downsampledCorScor)
     #np.save("data/allScoresDset1", downsampledCorScor1)
     #np.save("data/allScoresDset2", downsampledCorScor2)
