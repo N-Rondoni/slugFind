@@ -7,7 +7,9 @@ from spikefinder_eval import _downsample
 from parameterUtils import paramValues
 from scipy.integrate import solve_ivp
 from scipy.integrate import quad
-
+##
+# current winner for grad desc. implementation
+##
 
 def sigmoid(signal):
     sig = 1/(1 + np.exp(-1*(signal - 1)))
@@ -90,29 +92,36 @@ if __name__=="__main__":
     CiF_0 = CI_Meas[0]  
     gx_0 = 0.5
     gz_0 = 0.5
+
+    kf, kr, alpha, gamma, L = paramValues(dset, CiF_0)
+    # suppose instead params are pulled from lit
+    #kf = 0.032
+    #kr = 8
     
     kf = 0.1
     kr = 10
-    L = 100
-    gamma = 1
-    
+
     alpha = np.random.uniform(1, 30)
     alpha_list = np.arange(3, 40, 15)
     print(alpha_list)
-
+    alpha_list[0] = 30
     gamma = 1 #dsets  6, ... require a higher value of gamma or alpha will go negative. A RESULT OF forgetting vertical shift
 
     error_prev = 0
     error_min = 100
     paramsOut = [] # to be filled with final alpha of gradient descent
-    
-    alphaDif = 1000
-    numStep = 1000
 
+    numStep = 10000
+    alphaDif = 1000
     i = 0
-    for alpha in alpha_list:
+    for alpha in alpha_list: # can loop through many alphas, if dsired. 
         #print(alpha)
-        while (alphaDif > 0.0001) and (i < numStep):
+        #for i in range(numStep):
+        #while (alphaDif > 0.001) and (i <1000): #can terminate too quickly on earlier dsets
+        while i < 2000:
+            #print((alphaDif > 1), (i <1000), (alphaDif > 1) or (i <1000))
+
+
             print("Beginning grad descent step", i)
             
 
@@ -137,15 +146,20 @@ if __name__=="__main__":
             
             ga_L = np.sum(-2*(CI_Meas - CiF_f)*grad_Z*timeStep) 
             #print("gradient wrt alpha", ga_L)
-            # step
-            rho = 1  # learning rate
+        
+            rho = 1 # learning rate
             
+
             alphaPrev = alpha
+            
+            # step
             alpha = alpha - rho*ga_L
+
             alphaDif = np.abs(alphaPrev - alpha)
+            print(alphaDif)
 
             print("alpha:", alpha)
-
+            
             # compute loss wrt sigmoid of CI_meas, CI_sim. Utilizing 2norm. 
             error_current = np.linalg.norm(CI_Meas - CiF_f)#/len(CiF_f)
             error_dif = error_current - error_prev
@@ -165,6 +179,7 @@ if __name__=="__main__":
             print("MSE of measured calcium tracking tracking:", error_MSE)
             #print("Raw Differences, summed", np.sum((CI_Meas - CiF_f)**2)*timeStep)
             print("#____________________________________________________________________#")
+            i = i + 1
     
     print("Min error found: ", error_min)
     print("Created by using alpha = ", alpha_best,"gamma = ", gamma,  "kf = ", kf, "kr = ", kr)

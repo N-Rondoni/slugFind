@@ -16,6 +16,7 @@ from VPdistance import VPdis
 
 save = True#False
 ftype = "png"
+vpdFlag = True
 
 def plotCorrelations(factors, corrCoefs, neuron, dset):
     plt.figure()
@@ -222,10 +223,7 @@ if __name__=="__main__":
     
                 #simSpikesRaw = simSpikesRaw[~np.isnan(simSpikesRaw)]
                 #spikeDatRaw = spikeDatRawNans[~np.isnan(spikeDatRawNans)]
-                #print("a", np.shape(simSpikesRaw))
-
-                
-                
+                #print("a", np.shape(simSpikesRaw))                
 
                 #print("b", np.shape(simSpikesRaw))
                 #print("Afer removal Oasis shape", np.shape(simSpikesRaw))
@@ -236,8 +234,7 @@ if __name__=="__main__":
                 
 
                 finalTime = n*(imRate)
-                
-
+        
             
 
                 # create corr coeff
@@ -261,11 +258,12 @@ if __name__=="__main__":
                     # split Victur-Purpura computations into two (can run on subsets then add results, getting same score). VPD(a + b) = VPD(a) + VPD(b)
                     # this must be done for certain data sets if you have less than 16GB ram.    
                     Nreduced = int(len(spikeDatDown)/2)
-                    VPDtemp1 = VPdis(spikeDatDown[0:Nreduced], simSpikeDown[0:Nreduced], 1) 
-                    VPDtemp2 = VPdis(spikeDatDown[Nreduced:-1], simSpikeDown[Nreduced:-1], 1) 
-                    sumVPD = VPDtemp1 + VPDtemp2
-                    VPDs[j] = sumVPD                    
-                
+                    if vpdFlag == True: 
+                        VPDtemp1 = VPdis(spikeDatDown[0:Nreduced], simSpikeDown[0:Nreduced], 1) 
+                        VPDtemp2 = VPdis(spikeDatDown[Nreduced:-1], simSpikeDown[Nreduced:-1], 1) 
+                        sumVPD = VPDtemp1 + VPDtemp2
+                        VPDs[j] = sumVPD                    
+                    
                     if j == 0:
                         tempSum = tempSum + corrCoefs[0]
                         counter = counter + 1   
@@ -352,9 +350,10 @@ if __name__=="__main__":
     print("Genie mean from Oasis", np.mean(genie5))
     print("Genie median from Oasis", np.median(genie5))
 
-
-    #print("All VP distances:", allVPDs)
-    np.save("data/oasis_allVPDs", allVPDs)
+    if vpdFlag == True:
+        print("All VP distances:", allVPDs)
+        np.save("data/oasis_allVPDs", allVPDs)
+        
     np.save("data/allScoresOasis", downsampledCorScor)
     #np.save("data/allScoresDset1", downsampledCorScor1)
     #np.save("data/allScoresDset2", downsampledCorScor2)

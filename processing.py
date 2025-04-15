@@ -255,6 +255,20 @@ if __name__=="__main__":
     np.save("data/allScoresDset9", downsampledCorScor9)
     np.save("data/allScoresDset10", downsampledCorScor10)
 
+    print("standard deviations by dataset:")
+    print("1:", np.std(downsampledCorScor1)) 
+    print("2:", np.std(downsampledCorScor2))
+    print("3:", np.std(downsampledCorScor3))
+    print("4:", np.std(downsampledCorScor4))
+    print("5:", np.std(downsampledCorScor5))
+    print("6:", np.std(downsampledCorScor6))
+    print("7:", np.std(downsampledCorScor7))
+    print("8:", np.std(downsampledCorScor8))
+    print("9:", np.std(downsampledCorScor9))
+    print("10:", np.std(downsampledCorScor10))
+
+
+
     #print(allVPDs)
     #plt.show()
 

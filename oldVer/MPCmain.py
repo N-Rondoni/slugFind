@@ -19,7 +19,7 @@ import seaborn as sns
 from datetime import date
 import spikefinder_eval as se
 from spikefinder_eval import _downsample
-from parameterUtils import paramValues, learnedParams
+from parameterUtils import paramValues
 
 def tvp_fun(t_now):
     for k in range(n_horizon + 1):
@@ -77,13 +77,7 @@ if __name__=="__main__":
     penalty = 0.01
     # pull dset dependent params from parameterUtils.py
     kf, kr, alpha, gamma, L = paramValues(dset, CiF_0)
-
-    gamma = 1  
-    kf = 0.1
-    kr = 10
-    alpha = learnedParams(dset)
-
-   
+            
     tstep = 1/100 # tstep of solver, can be reworked to be different from imRate, requires interpolation. 
    
     s = model.set_variable('_u', 's')         # control variable
@@ -176,7 +170,7 @@ if __name__=="__main__":
     Ci_f = L - CiF_f
 
     # sigmoid calcium indicator so it is comoparable to calcium ion. 
-    CiF_f = sigmoid(CiF_f) #- .15
+    CiF_f = sigmoid(CiF_f)
 
     # transpose
     sol = np.transpose(mpc.data['_x'])
@@ -188,13 +182,13 @@ if __name__=="__main__":
     s = np.array(s[:,0])                        # reshape s for future computations    
     s_interp = np.interp(timeVec, t_f[:,0], s)  # interp command only does something if tstep isn't the same as imRate
 
-    print("Relative 2norm of measured calcium tracking:", np.linalg.norm(CI_Meas_interp - CiF_f)/len(CiF_f))
-    print("MSE of measured calcium tracking tracking:", np.mean(CI_Meas_interp - CiF_f)**2)
+    print("Relative MSE of measured calcium tracking tracking:", np.linalg.norm(CI_Meas_interp - CiF_f)/len(CiF_f))
 
     # load in actual ground truth spike data
     file_path2 = 'data/processed/node'+ str(row) + '_dset' + str(dset) + '.' + str(stat) + '.spikes.npy'
     spikeDatRaw = np.load(file_path2)
-    spikeDatRaw = spikeDatRaw[:n]
+    spikeDatRaw = spikeDatRaw[:n] 
+    
     
     ##---------------------------------------------------------------------------------##
     # POST PROCESS BELOW, saving, downsampling, and correlation comutations.            #

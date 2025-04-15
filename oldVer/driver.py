@@ -13,17 +13,14 @@ In essense, this file produces command line inputs such as
 python3 MPCmain.py 0 1 test
 """
 
-dsets = [1, 2, 3, 4, 5]
+#dsets = [1, 2, 3, 4, 5]
 status = ['test', 'train'] 
-
-vertShifts = [0.15, 0.25, 0.35]
-
 
 
 for stat in status:
     if stat == 'train':
         dsets = [1, 2, 3, 4, 5, 6, 7, 10, 8, 9] # there are more training sets than test sets. 
-    else:
+    if stat == 'test': 
         dsets = [1, 2, 3, 4, 5]
 
     for dset in dsets:
@@ -34,8 +31,7 @@ for stat in status:
         mDat, nDat = np.shape(data1) 
         # loop through rows, each corresponds to a neuron. 
         i = 0
-        while i < mDat: # instead just do first row of each. 
-        
+        while i < mDat:
             start  = time.time()
             print("Beginning solve on", str(stat) ,"data set", str(dset) + ", neuron",  i)
             
@@ -48,9 +44,9 @@ for stat in status:
                 print("This neuron's data contained NaNs! Solving up until NaNs begin... ") 
                 
             # run solver, if NaNs present main will simulate up until they begin. 
-            os.system("python3 alphaOnly_testing.py " + str(i) + " " + str(dset) + " " + str(stat))
+            os.system("python3 MPCmain.py " + str(i) + " " + str(dset) + " " + str(stat))
             end = time.time()
             print("previous solve for neuron", i, "completed in", (end - start)/60, "minutes")
-            print("------------------------------------------------------------------------")     
+            print("------------------------------------------------------------------------")
             i = i + 1
 

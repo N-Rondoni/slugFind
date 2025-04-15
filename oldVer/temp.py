@@ -51,7 +51,7 @@ if __name__=="__main__":
     n = len(CI_Meas)
 
     # apply sigmoidal filter to help minimize noise
-    CI_Meas = sigmoid(CI_Meas) - 0.15
+    CI_Meas = sigmoid(CI_Meas) - 0.35 #0.25 by default. If not fixed, go to .35
 
     # set up timevec, recordings were resampled to 100 hz
     imRate = 1/100
@@ -78,12 +78,18 @@ if __name__=="__main__":
     # pull dset dependent params from parameterUtils.py
     kf, kr, alpha, gamma, L = paramValues(dset, CiF_0)
 
-    gamma = 1  
+    gamma = 1 # dsets 6, ... require gamma to be upped. 
     kf = 0.1
     kr = 10
     alpha = learnedParams(dset)
+    if dset == 8:  
+        alpha = 55.83 # dset 8
+        #np.save("alphas_node1_dset8.train_params_gamma_1kf_0.1kr_10.npy", alpha)
+    if dset == 9:
+        #alpha = 1.7734794306742592 # dset 9 
+        alpha = 21.71118311993751
+        #np.save("alphas_node1_dset8.train_params_gamma_1kf_0.1kr_10.npy", alpha)
 
-   
     tstep = 1/100 # tstep of solver, can be reworked to be different from imRate, requires interpolation. 
    
     s = model.set_variable('_u', 's')         # control variable
@@ -175,7 +181,7 @@ if __name__=="__main__":
     # compute quantity of calcium indicator unbound (not fluoresced)
     Ci_f = L - CiF_f
 
-    # sigmoid calcium indicator so it is comoparable to calcium ion. 
+    # sigmoid calcium indicator so it is comparable to calcium ion. 
     CiF_f = sigmoid(CiF_f) #- .15
 
     # transpose
@@ -212,9 +218,10 @@ if __name__=="__main__":
        
     # finally scale so viewing is more clear
     s = (np.max(spikeDat)/np.max(s))*s # correlation coeff. invariant wrt scaling. 
-
+    
     # compute correlation coefficient 
     corrCoef = np.corrcoef(s[100:], spikeDat[100:])[0, 1] # toss first second of recording, can contain bad transient dynamics
     print("Corr Coef:", corrCoef)
-
+    #print("Last 100 s vals:", s[-1:-100])
+    #print(s[-1:100] == 1)
     

@@ -17,6 +17,10 @@ from VPdistance import VPdis
 save = True#False
 ftype = "png"
 
+vpdFlag = False # set to True if you want to recompute all VP distances. Adds a lot of computational time. 
+
+
+
 def plotCorrelations(factors, corrCoefs, neuron, dset):
     plt.figure()
     fig, ax1 = plt.subplots(figsize=(10, 6))
@@ -228,11 +232,12 @@ if __name__=="__main__":
                     # split Victur-Purpura computations into two (can run on subsets then add results, getting same score). VPD(a + b) = VPD(a) + VPD(b)
                     # this must be done for certain data sets if you have less than 16GB ram.    
                     Nreduced = int(len(spikeDatDown)/2)
-                    VPDtemp1 = VPdis(spikeDatDown[0:Nreduced], simSpikeDown[0:Nreduced], 1) 
-                    VPDtemp2 = VPdis(spikeDatDown[Nreduced:-1], simSpikeDown[Nreduced:-1], 1) 
-                    sumVPD = VPDtemp1 + VPDtemp2
-                    VPDs[j] = sumVPD                    
-                
+                    if vpdFlag == True:
+                        VPDtemp1 = VPdis(spikeDatDown[0:Nreduced], simSpikeDown[0:Nreduced], 1) 
+                        VPDtemp2 = VPdis(spikeDatDown[Nreduced:-1], simSpikeDown[Nreduced:-1], 1) 
+                        sumVPD = VPDtemp1 + VPDtemp2
+                        VPDs[j] = sumVPD                    
+                    
                     if j == 0:
                         tempSum = tempSum + corrCoefs[0]
                         counter = counter + 1   
@@ -291,8 +296,9 @@ if __name__=="__main__":
     print("All cors:", downsampledCorScor)
     print("Median of whole set:", np.median(downsampledCorScor))
     print("Mean of whole set:", np.mean(downsampledCorScor))
-    #print("All VP distances:", allVPDs)
-    np.save("data/stm_allVPDs", allVPDs)
+    if vpdFlag == True:
+        print("All VP distances:", allVPDs)
+        np.save("data/stm_allVPDs", allVPDs)
     first5 = []
     first5 = np.append(first5, downsampledCorScor1)
     first5 = np.append(first5, downsampledCorScor2)

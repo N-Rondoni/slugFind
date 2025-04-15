@@ -90,12 +90,15 @@ if __name__=="__main__":
     CiF_0 = CI_Meas[0]  
     gx_0 = 0.5
     gz_0 = 0.5
+
+    kf, kr, alpha, gamma, L = paramValues(dset, CiF_0)
+    # suppose instead params are pulled from lit
+    #kf = 0.032
+    #kr = 8
     
     kf = 0.1
     kr = 10
-    L = 100
-    gamma = 1
-    
+
     alpha = np.random.uniform(1, 30)
     alpha_list = np.arange(3, 40, 15)
     print(alpha_list)
@@ -105,14 +108,11 @@ if __name__=="__main__":
     error_prev = 0
     error_min = 100
     paramsOut = [] # to be filled with final alpha of gradient descent
-    
-    alphaDif = 1000
-    numStep = 1000
 
-    i = 0
+    numStep = 100
     for alpha in alpha_list:
         #print(alpha)
-        while (alphaDif > 0.0001) and (i < numStep):
+        for i in range(numStep):
             print("Beginning grad descent step", i)
             
 
@@ -139,11 +139,9 @@ if __name__=="__main__":
             #print("gradient wrt alpha", ga_L)
             # step
             rho = 1  # learning rate
-            
-            alphaPrev = alpha
             alpha = alpha - rho*ga_L
-            alphaDif = np.abs(alphaPrev - alpha)
-
+        
+            
             print("alpha:", alpha)
 
             # compute loss wrt sigmoid of CI_meas, CI_sim. Utilizing 2norm. 
@@ -173,7 +171,7 @@ if __name__=="__main__":
     print(paramsOut)
     saveLoc = 'data/paramEstimation/alphas_node'+ str(row) + '_dset' + str(dset) + '.' + str(stat) + '_params_' + 'gamma_'+ str(gamma) +  'kf_' + str(kf) + 'kr_' + str(kr)
 
-    #np.save(saveLoc, paramsOut)
+    np.save(saveLoc, paramsOut)
 
     stop = time.time()
     runTime = (stop - start)/60
