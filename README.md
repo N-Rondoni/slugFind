@@ -7,17 +7,24 @@ slugFind, or MPC approach as it is referred to in its accompanying manuscript, i
 
 
  This directory contains the major software contributions of the paper entitled 
- "Predicting Neuronal Firing from Calcium Imaging Using a Control Theoretic Approach".
+ "Predicting Neuronal Firing from Calcium Imaging Using a Control Theoretic Approach"
+ published through PLOS at https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1012603
 
 #--------------------------------------------------------------------------------------------#
  
  In summary, the ground up workflow should be
  
  -dataPrep.py
+
+ -estimateDriver.py will iterate through available datasets in the spikefinder challenge, or one may point estimateParams.py at their specific file.
+
+ -make sure your learned alpha is stored in paramUtils.py (either hardcod or point to the location estimateParams saved alpha at). 
  
  -can run: MPCmain.py 0 1 "test" from command line for specific node/dataset/condition. In this example, node 0 dset 1 condition "test".
- 
+
  Alternatively, driver.py will iterate through all nodes/datasets/conditions
+
+ -can also point MPCmain.py to your own calcium recording, should you have such data
  
  -processing.py computes and saves all correlation scores, as well as VPD distances
  
