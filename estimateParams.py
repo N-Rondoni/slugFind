@@ -159,6 +159,8 @@ if __name__=="__main__":
             if (i+1) % numStep == 0:
                 alpha_fin = alpha
                 paramsOut = np.append(paramsOut, alpha_fin)
+            
+            i = i+1
 
             print("2norm of measured calcium tracking tracking:", error_current)
             print("difference in error between previous step:", error_dif)
