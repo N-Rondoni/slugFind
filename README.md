@@ -10,8 +10,8 @@ slugFind, or MPC approach as it is referred to in its accompanying manuscript, i
  "Predicting Neuronal Firing from Calcium Imaging Using a Control Theoretic Approach"
  published through PLOS at https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1012603
 
-#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
- 
+#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=#
+
  In summary, the ground up workflow should be
  
  -dataPrep.py
@@ -32,7 +32,7 @@ slugFind, or MPC approach as it is referred to in its accompanying manuscript, i
  
  -for visualizations of spiking as a function of calcium data on a subset, use fancyPlottingMPCmain.py
  
-#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=#
 
  All raw .csv files, e.g., 1.test.calcium.csv,  were provided from the spikefinder challenge and can be found within the subfolder "data"
  
@@ -43,7 +43,8 @@ slugFind, or MPC approach as it is referred to in its accompanying manuscript, i
  
  for compiling and providing it. 
 
-#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=#
+
 FURTHER DETAILS AND DATA ORGANIZATION
 
 Within the folder "data" is a subfolder named "processed" (path data/processed). This folder
