@@ -18,7 +18,7 @@ slugFind, or MPC approach as it is referred to in its accompanying manuscript, i
 
  -estimateDriver.py will iterate through available datasets in the spikefinder challenge, or one may point estimateParams.py at their specific file.
 
- -make sure your learned alpha is stored in paramUtils.py (either hardcod or point to the location estimateParams saved alpha at). 
+ -make sure your learned alpha is stored in paramUtils.py (either hardcode or point to the location estimateParams saved alpha at). 
  
  -can run: MPCmain.py 0 1 "test" from command line for specific node/dataset/condition. In this example, node 0 dset 1 condition "test".
 
@@ -67,7 +67,7 @@ slugFind, or MPC approach as it is referred to in its accompanying manuscript, i
  
  driver.py can be used to loop through all neurons, datasets, and train/test conditions. 
 
- the following codes examine the output of MPCmain, plotting it and comparing the output to other state of the art methods. 
+ The following codes examine the output of MPCmain, plotting it and comparing the output to other state of the art methods. 
  
  At this point, processing.py should be ran. This can take a while due to the computational cost of computing VP distances.
  
@@ -77,6 +77,6 @@ slugFind, or MPC approach as it is referred to in its accompanying manuscript, i
 
  For visualization, run plotFriend.py, which will generate most the figures used in the paper. 
  
- For visulaization of specific subsets of spiking activity, run fancyPlottingMPCmain.py 
+ For visualization of specific subsets of spiking activity, run fancyPlottingMPCmain.py 
  
  fancyPlottingMPCmain.py is exactly MPCmain.py, but produces fancy plots which would slow down driver.py if looped over. 
